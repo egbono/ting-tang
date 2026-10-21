@@ -1,0 +1,1253 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ting &amp; Tang">
+<meta name="theme-color" content="#0e5b61">
+<title>TettPå Ting &amp; Tang · versjon 9</title>
+<style>
+:root{--petrol:#0e5b61;--petrol-600:#0a4a4f;--petrol-050:#e7f1f1;--petrol-300:#4a9aa0;--amber:#d98324;--mist:#eef2f0;--paper:#fff;--ink:#16201d;--muted:#5f6f6a;--line:#dde4e1;--red:#c0413b;--green:#2f8f5b;--font-d:'Bricolage Grotesque',Inter,sans-serif;--font-b:Inter,-apple-system,system-ui,sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:Inter,-apple-system,system-ui,sans-serif;background:var(--mist);color:var(--ink);font-size:15px;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+.ph-h{background:var(--petrol);color:#fff;padding:calc(env(safe-area-inset-top) + 12px) 16px 10px;flex:0 0 auto}
+.ph-h .a{font:700 22px var(--font-d)}.ph-h .b{font-size:12.5px;opacity:.85}
+#warnbar:empty{display:none}
+.warnbar{display:flex;gap:10px;align-items:flex-start;background:#fbeceb;border-bottom:2px solid var(--red);color:#7d1f1a;padding:10px 14px;font-size:13px;flex:0 0 auto}
+.warnbar svg{width:18px;height:18px;flex:0 0 auto;margin-top:1px}
+#ttv{flex:1 1 auto;overflow:auto;padding:10px;-webkit-overflow-scrolling:touch}
+.ph-ver{text-align:center;color:#8a9692;font-size:11.5px;margin:12px 0 6px}
+.ph-nav{display:flex;border-top:1.5px solid var(--line);background:#fff;flex:0 0 auto;padding-bottom:env(safe-area-inset-bottom)}
+.ph-nav button{flex:1;border:none;background:none;padding:9px 2px 10px;font:700 11px Inter,system-ui;color:#6d7b77;cursor:pointer}
+.ph-nav button.on{color:var(--petrol)}
+.ph-nav button svg{display:block;margin:0 auto 2px;width:22px;height:22px}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 76px);transform:translateX(-50%);background:#16201d;color:#fff;border-radius:12px;padding:10px 16px;font:600 13px Inter,system-ui;display:none;z-index:9999;max-width:92vw;text-align:center}
+#toast.on{display:block}
+.tt-inp,.tt-sel,.tt-sok input,.tt-addk input,.tt-tagbox input{font-size:16px}
+.tt-wrap{max-width:none}
+/* ===== Ting & Tang ===== */
+.tt-dp{display:block;width:100%;border:2px solid var(--petrol,#0e5b61);border-radius:11px;padding:13px 14px;background:var(--paper,#fff);font:700 14.5px system-ui;color:var(--ink,#16201d);cursor:pointer;text-align:center;margin-bottom:10px}
+.tt-dp:hover,.tt-dp:active{background:var(--petrol-050,#e7f1f1)}
+.tt-dpf{border-top:1.5px solid var(--line,#dde4e1);margin:4px -14px -14px;padding:12px 18px;display:flex;justify-content:flex-end}
+.tt-dpf button{border:none;background:none;font:700 14.5px system-ui;color:#6a7a76;cursor:pointer}
+.tt-fz{border:1.5px solid #e6c5c2;background:var(--paper,#fff);border-radius:14px;padding:14px;margin-bottom:10px;color:var(--ink,#16201d)}
+.tt-fz h3{margin:0 0 10px;font:800 15px system-ui;color:#c0413b;display:flex;gap:7px;align-items:center}
+.tt-fz h3 svg{width:17px;height:17px}
+.tt-fzb{display:flex;gap:10px;flex-wrap:wrap}
+.tt-fzb button{display:inline-flex;gap:7px;align-items:center;border-radius:11px;padding:9px 15px;font:800 13.5px system-ui;cursor:pointer;border:1.5px solid #b84a44;color:#9a2f2a;background:var(--paper,#fff)}
+.tt-fzb button svg{width:16px;height:16px}
+.tt-fzb button.w{background:#8a2a25;border-color:#8a2a25;color:#fff}
+.tt-fzt{font-size:12.5px;color:var(--muted,#5f6f6a);margin:10px 0 0;line-height:1.5}
+.tt-wrap{max-width:900px}
+.tt-fr{border:1.5px solid #9bb3b1;border-radius:16px;background:var(--mist,#e6edeb);padding:8px;margin-bottom:8px}
+.tt-tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tt-chip{border:1.5px solid var(--line,#cfdad7);background:var(--paper,#fff);border-radius:999px;padding:7px 13px;font:800 12.5px var(--font-b,system-ui),system-ui,sans-serif;color:var(--petrol,#0e5b61);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.tt-chip svg{width:15px;height:15px}
+.tt-chip.dark{background:var(--petrol,#0e5b61);border-color:var(--petrol,#0e5b61);color:#fff}
+.tt-chip.act{background:var(--petrol-050,#e7f1f1);border-color:var(--petrol,#0e5b61)}
+.tt-vs{width:1.5px;height:22px;background:#bccbc8;margin:0 3px}
+.tt-toolp{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font:800 11.5px system-ui;color:var(--muted,#5f6f6a)}
+.tt-sok{display:flex;gap:8px;align-items:center;border:1.5px solid var(--line,#cfdad7);background:var(--paper,#fff);border-radius:12px;padding:7px 11px;margin-bottom:8px}
+.tt-sok svg{width:16px;height:16px;color:var(--muted,#5f6f6a);flex:0 0 auto}
+.tt-sok input{flex:1;border:none;outline:none;font:600 14px system-ui;background:none;min-width:0;color:var(--ink,#16201d)}
+.tt-cnt{font:800 11.5px system-ui;color:var(--petrol,#0e5b61);background:var(--petrol-050,#dcecee);border-radius:9px;padding:2px 9px;white-space:nowrap}
+.tt-card{background:var(--paper,#fff);border:1.5px solid var(--line,#b9c8c5);border-radius:12px;padding:9px;margin-bottom:6px;display:flex;gap:10px;cursor:pointer;align-items:flex-start;color:var(--ink,#16201d)}
+.tt-card:hover{border-color:var(--petrol,#0e5b61)}
+.tt-th{width:56px;height:56px;border-radius:10px;flex:0 0 auto;background:#dfe8e6;object-fit:cover;display:flex;align-items:center;justify-content:center;font:800 20px system-ui;color:#5f7571}
+.tt-c1{flex:1;min-width:0}.tt-c1 .tt-t{font:800 14.5px system-ui;word-break:break-word}
+.tt-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.tt-pill{border-radius:8px;padding:1px 8px;font:800 11px system-ui;background:#eef2f0;color:#4a5a56;white-space:nowrap}
+.tt-pill.loc{background:#e6eefb;color:#245a99}.tt-pill.kol{background:#f3e8f7;color:#7a3a8f}.tt-pill.st{background:#e8f5ee;color:#2f7a52}.tt-pill.tg{background:#fdf1e0;color:#9a5d12}
+.tt-right{text-align:right;flex:0 0 auto}.tt-right .tt-v{font:800 14px system-ui}.tt-right .tt-s{font:700 11px system-ui;color:var(--muted,#5f6f6a)}
+.tt-badge{display:inline-block;border-radius:8px;padding:1px 8px;font:800 10.5px system-ui;margin-top:3px}
+.tt-badge.ok{background:#e8f5ee;color:#2f8f5b}.tt-badge.warn{background:#fdf1e0;color:#a35f10}.tt-badge.exp{background:#fbeceb;color:#c0413b}.tt-badge.sold{background:#e6eefb;color:#245a99}
+.tt-sum{border:2px solid var(--petrol,#0e5b61);border-radius:12px;background:var(--paper,#fff);padding:9px 12px;font:800 13px system-ui;display:flex;justify-content:space-between;margin-top:8px;color:var(--ink,#16201d)}
+.tt-empty{color:var(--muted,#5f6f6a);padding:18px 4px;text-align:center;font-size:13.5px}
+.tt-back{position:fixed;inset:0;background:rgba(18,30,28,.5);display:flex;align-items:flex-start;justify-content:center;padding:30px 12px;overflow:auto;z-index:9000}
+.tt-dlg{background:var(--paper,#fff);border-radius:16px;width:100%;max-width:640px;padding:14px;box-shadow:0 18px 50px rgba(0,0,0,.3);color:var(--ink,#16201d)}
+.tt-dh{display:flex;align-items:center;font:800 16px system-ui;color:var(--petrol,#0e5b61);margin:0 0 10px}.tt-dh .tt-x{margin-left:auto;border:none;background:none;cursor:pointer;color:#5b6b66;padding:2px}.tt-dh .tt-x svg{width:20px;height:20px}
+.tt-gf{border:var(--tbw,2px) solid var(--tbd,var(--petrol,#0e5b61));border-radius:11px;padding:var(--tpv,10px) var(--tph,12px);background:var(--tbg,var(--petrol-050,#e7f1f1));margin-bottom:var(--tgap,10px)}
+.tt-gf .tt-lb{display:block;font:800 12px system-ui;color:var(--tlb,var(--petrol-600,#0b4a4f));margin:0 0 4px}
+.tt-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tt-inp,.tt-sel{width:100%;border:1.5px solid var(--tib,#9cc4c6);border-radius:10px;padding:var(--tip,8px) 10px;font:600 14px system-ui;background:var(--paper,#fff);color:var(--ink,#16201d);box-sizing:border-box}
+.tt-inp:focus,.tt-sel:focus{outline:none;box-shadow:0 0 0 3px rgba(14,91,97,.15)}
+textarea.tt-inp{min-height:84px;resize:vertical;font-weight:500}
+.tt-katrow{display:flex;gap:6px}.tt-katrow .tt-sel{flex:1}.tt-katrow button{border:1.5px solid var(--tib,#9cc4c6);background:var(--paper,#fff);border-radius:10px;padding:0 12px;font:800 15px system-ui;color:var(--petrol,#0e5b61);cursor:pointer}
+.tt-tagbox{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1.5px solid var(--tib,#9cc4c6);border-radius:10px;background:var(--paper,#fff);padding:6px 8px;min-height:40px}
+.tt-tagbox .tt-pill{display:inline-flex;gap:5px;align-items:center}.tt-tagbox .tt-pill button{border:none;background:none;cursor:pointer;color:#9a5d12;font-size:12px;padding:0}
+.tt-tagbox input{border:none;outline:none;flex:1;min-width:90px;font:600 13.5px system-ui;background:none;color:var(--ink,#16201d)}
+.tt-sug{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}.tt-sug .tt-pill{cursor:pointer;opacity:.85}
+.tt-imgs{display:flex;gap:8px;flex-wrap:wrap}
+.tt-img{position:relative;width:84px;height:84px;border-radius:10px;overflow:hidden;border:1.5px solid var(--tib,#9cc4c6);background:#dfe8e6}
+.tt-img img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+.tt-img button{position:absolute;top:3px;right:3px;border:none;background:rgba(0,0,0,.6);color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:11px;line-height:1;padding:0}
+.tt-img.first::after{content:"Forside";position:absolute;left:0;right:0;bottom:0;background:rgba(14,91,97,.85);color:#fff;font:800 10px system-ui;text-align:center;padding:1px;pointer-events:none}
+.tt-addimg{width:84px;height:84px;border-radius:10px;border:2px dashed var(--petrol,#0e5b61);background:var(--paper,#fff);color:var(--petrol,#0e5b61);cursor:pointer;font:800 12px system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.tt-addimg b{font-size:22px;line-height:1}
+.tt-foot{display:flex;gap:8px;justify-content:space-between;margin-top:6px}
+.tt-bt{border:1.5px solid var(--line,#dde4e1);background:var(--paper,#fff);border-radius:10px;padding:8px 16px;font:800 13px system-ui;cursor:pointer;color:var(--ink,#16201d)}.tt-bt.p{background:var(--petrol,#0e5b61);border-color:var(--petrol,#0e5b61);color:#fff}.tt-bt.d{color:#c0413b}.tt-bt.dd{background:#c0413b;border-color:#c0413b;color:#fff}
+.tt-gar{font:700 12px system-ui;margin-top:5px}
+.tt-panel{background:var(--paper,#fff);border:1.5px solid var(--line,#dde4e1);border-radius:14px;padding:12px;margin-bottom:10px;color:var(--ink,#16201d)}
+.tt-panel h3{margin:0 0 8px;font:800 14px system-ui;color:var(--petrol,#0e5b61)}
+.tt-krow{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line,#dde4e1);border-radius:10px;padding:6px 10px;margin-bottom:4px;font-weight:700}
+.tt-krow span{flex:1;word-break:break-word}.tt-krow small{color:var(--muted,#5f6f6a);font-weight:600}.tt-krow button{border:none;background:none;cursor:pointer;color:#8a938f;padding:2px}.tt-krow button:hover{color:#c0413b}.tt-krow button svg{width:15px;height:15px}
+.tt-addk{display:flex;gap:6px;margin-top:6px}.tt-addk input{flex:1;border:1.5px solid var(--line,#cfdad7);border-radius:9px;padding:7px 10px;font:600 13px system-ui;min-width:0;background:var(--paper,#fff);color:var(--ink,#16201d)}
+.tt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}.tt-stc{background:var(--mist,#f3f7f6);border-radius:10px;padding:8px;text-align:center}.tt-stc b{display:block;font:800 18px system-ui}.tt-stc span{font-size:11.5px;color:var(--muted,#5f6f6a)}
+.tt-meta2{font-size:12px;color:var(--muted,#5f6f6a);display:flex;flex-direction:column;gap:2px}
+.tt-sb{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line,#dde4e1);background:var(--paper,#fff);border-radius:12px;padding:10px 12px;width:100%;text-align:left;cursor:pointer;margin-bottom:6px;font-family:inherit;color:var(--ink,#16201d)}
+.tt-sb svg{width:20px;height:20px;flex:0 0 auto;color:var(--petrol,#0e5b61)}
+.tt-sb.pri{border-color:var(--petrol,#0e5b61);background:var(--petrol-050,#e7f1f1)}.tt-sb .tt-tt{display:block;font:800 13.5px system-ui}.tt-sb small{color:var(--muted,#5f6f6a);font-size:12px}
+.tt-fname{font-size:11.5px;color:var(--muted,#5f6f6a);margin-top:6px;word-break:break-all}
+.tt-drop{border:2px dashed #9cc4c6;border-radius:12px;padding:14px;text-align:center;color:var(--muted,#5f6f6a);font:700 12.5px system-ui;cursor:pointer;margin-top:6px}.tt-drop.drag{background:var(--petrol-050,#e7f1f1);border-color:var(--petrol,#0e5b61)}
+.tt-res{background:#e8f5ee;border-radius:10px;padding:8px 10px;font-size:12.5px;margin-top:8px;color:#1f5f3c}
+.tt-lb2{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9500;display:flex;align-items:center;justify-content:center;padding:14px;cursor:zoom-out}.tt-lb2 img{max-width:100%;max-height:100%;border-radius:8px}
+.tt-store{margin-top:4px}
+@media (max-width:560px){.tt-two{grid-template-columns:1fr 1fr}.tt-back{padding:12px 8px}.tt-dlg{padding:12px}}
+
+.tt-dz{border:2.5px dashed var(--petrol,#0e5b61);border-radius:14px;background:var(--paper,#fff);padding:var(--tdzp,16px) 12px;text-align:center;color:var(--ink,#33524f);transition:.12s;margin-top:8px}
+.tt-dz>svg{width:30px;height:30px;color:var(--petrol,#0e5b61)}
+.tt-dz .tt-t1{font:800 14px system-ui;margin:4px 0 2px}.tt-dz .tt-t2{font-size:12px;color:var(--muted,#5f6f6a);margin-bottom:10px}
+.tt-dz.over{background:var(--petrol-050,#d9ecee);border-style:solid;transform:scale(1.01)}
+.tt-dbtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tt-tip{font-size:11.5px;color:var(--muted,#5f6f6a);margin-top:8px}
+.tt-imsg{font:700 12px system-ui;color:#1f5f3c;margin-top:6px;min-height:16px}
+.tt-cam{background:#101a19;border-radius:14px;padding:10px;text-align:center;margin-top:8px}
+.tt-cam video{width:100%;max-height:260px;border-radius:10px;background:#000;display:block;object-fit:cover}
+.tt-vfn{color:#cfe3e1;font:600 13px system-ui;padding:30px 14px;line-height:1.5}
+.tt-camrow{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:10px}
+.tt-camrow button{border:none;border-radius:10px;padding:9px 16px;font:800 13px system-ui;cursor:pointer;background:#fff;color:#0e5b61}
+.tt-camrow button.tt-shut{background:#fff;border:4px solid #9fc9cc;width:54px;height:54px;border-radius:50%;padding:0}
+.tt-cnt2{color:#cfe3e1;font:700 12px system-ui;margin-top:6px}
+
+.tt-wrap mark{background:#ffe08a;color:inherit;border-radius:3px;padding:0 1px}
+.tt-fsel{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 8px}
+.tt-fsel b{font:800 11.5px system-ui;color:var(--muted,#5f6f6a);letter-spacing:.03em;text-transform:uppercase;margin-right:2px}
+.tt-fsel button{border:1.5px solid var(--line,#cfdad7);background:var(--paper,#fff);border-radius:999px;padding:5px 11px;font:800 12px system-ui;color:var(--ink,#33433f);cursor:pointer}
+.tt-fsel button.on{background:var(--petrol,#0e5b61);border-color:var(--petrol,#0e5b61);color:#fff}
+.tt-x2{border:none;background:none;cursor:pointer;color:#8a938f;font-size:15px;padding:0 2px}
+.tt-snip{font-size:12.5px;color:var(--ink,#46524e);margin-top:5px;background:var(--mist,#f6f8f7);border-radius:8px;padding:4px 8px;line-height:1.4;word-break:break-word}
+.tt-snip b{font:800 10.5px system-ui;color:var(--petrol,#0e5b61);text-transform:uppercase;letter-spacing:.03em;margin-right:5px}
+.tt-treff{font:800 10.5px system-ui;color:#245a99;margin-top:4px}
+.tt-res{font:700 12.5px system-ui;color:var(--muted,#5f6f6a);margin:2px 2px 8px}
+.tt-hint{background:var(--paper,#fff);border:1.5px dashed #b9c8c5;border-radius:12px;padding:14px;text-align:center;color:var(--muted,#5f6f6a);font-size:13px}
+
+.tt-sfr{border:1.5px solid #9bb3b1;border-radius:16px;background:var(--mist,#e6edeb);padding:8px;margin-bottom:10px}
+.tt-sfr .tt-sok{margin-bottom:8px}.tt-sfr .tt-fsel{margin:0}
+.tt-lf{border:1.5px solid #9bb3b1;border-radius:16px;background:var(--mist,#e6edeb);padding:8px;margin-bottom:10px}
+.tt-lh{display:flex;align-items:center;gap:8px;padding:2px 4px 8px;flex-wrap:wrap}
+.tt-tg2{display:flex;align-items:center;gap:8px;border:none;background:none;cursor:pointer;font:800 14px system-ui;color:var(--petrol-600,#0b4a4f);padding:0}
+.tt-tg2 svg{width:16px;height:16px;transition:.15s}.tt-tg2.cl svg{transform:rotate(-90deg)}
+.tt-n{font:800 11.5px system-ui;color:var(--petrol,#0e5b61);background:var(--petrol-050,#dcecee);border-radius:9px;padding:2px 9px}
+.tt-vsel{margin-left:auto;border:1.5px solid #9cc4c6;border-radius:10px;background:var(--paper,#fff);padding:6px 10px;font:800 12.5px system-ui;color:var(--petrol,#0e5b61);cursor:pointer}
+.tt-lf #ttlist:empty{display:none}.tt-lf .tt-lh:has(+ #ttlist:empty){padding-bottom:2px}
+.tt-more{display:block;width:100%;border:1.5px dashed var(--petrol,#0e5b61);background:var(--paper,#fff);color:var(--petrol,#0e5b61);border-radius:12px;padding:9px;font:800 13px system-ui;cursor:pointer;margin-top:2px}
+.tt-more:hover{background:var(--petrol-050,#e7f1f1)}
+.tt-ovl{position:absolute;inset:-2px;border-radius:11px;background:rgba(14,91,97,.92);color:#fff;display:none;align-items:center;justify-content:center;flex-direction:column;font:800 16px system-ui;z-index:5;pointer-events:none}
+.tt-ovl small{font:600 12px system-ui;opacity:.9;margin-top:4px}
+.tt-gf{position:relative}
+.tt-gf.over .tt-ovl{display:flex}
+
+.tt-lev{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:6px;font:700 12.5px system-ui;color:#33433f;background:#f6f8f7;border-radius:9px;padding:6px 8px}
+.tt-ln{flex:1 1 100%;min-width:0;line-height:1.4;word-break:break-word}
+.tt-ln b{font:800 10.5px system-ui;color:var(--petrol,#0e5b61);text-transform:uppercase;letter-spacing:.03em;margin-right:6px}
+.tt-ln a{color:#245a99;text-decoration:none;font-weight:700}.tt-ln a:hover{text-decoration:underline}
+.tt-cp{border:1.5px solid #cfdad7;background:#fff;border-radius:8px;padding:3px 9px;font:800 11.5px system-ui;color:var(--petrol,#0e5b61);cursor:pointer;white-space:nowrap;display:inline-flex;gap:5px;align-items:center;flex:0 0 auto}
+.tt-cp svg{width:13px;height:13px}.tt-cp.done{background:#e8f5ee;border-color:#2f8f5b;color:#1f6b42}
+.tt-cp.big{padding:8px 11px;font-size:12.5px;border-radius:10px}
+.tt-cp.pri{background:var(--petrol,#0e5b61);border-color:var(--petrol,#0e5b61);color:#fff}.tt-cp.pri.done{background:#2f8f5b;border-color:#2f8f5b}
+.tt-cpt{border:1.5px solid #cfdad7;background:#fff;border-radius:8px;width:30px;height:28px;display:inline-flex;align-items:center;justify-content:center;color:var(--petrol,#0e5b61);cursor:pointer;margin-top:6px;padding:0}
+.tt-cpt svg{width:15px;height:15px}.tt-cpt:hover{background:var(--petrol-050,#e7f1f1);border-color:var(--petrol,#0e5b61)}
+.tt-lrow{display:flex;gap:6px;align-items:center}.tt-lrow .tt-inp{flex:1;min-width:0}
+.tt-op{border:1.5px solid #cfdad7;background:#fff;border-radius:10px;padding:8px 11px;font:800 12.5px system-ui;color:#245a99;text-decoration:none;white-space:nowrap}
+.tt-lone{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px;background:#fff;border:1.5px dashed #9cc4c6;border-radius:10px;padding:7px 9px}
+.tt-lone .tx{flex:1 1 100%;min-width:0;font:600 12.5px system-ui;color:#33433f;word-break:break-all}
+.tt-kb{background:#fff8e6;border:1.5px solid #e3b36c;border-radius:11px;padding:9px 12px;font:600 12.5px system-ui;color:#7a4b0f;margin-bottom:10px}.tt-kb b{font-weight:800}
+.tt-bt.k{border-color:var(--petrol,#0e5b61);color:var(--petrol,#0e5b61);display:inline-flex;gap:5px;align-items:center}.tt-bt.k svg{width:14px;height:14px}
+/* Forslag 156: skjema-oppsett og tema */
+.tt-dlg.tt-k{--tpv:7px;--tph:10px;--tgap:7px;--tip:5px;--tfg:6px;--tlp:5px;--tdzp:8px}
+.tt-sg{position:relative;border:var(--tbw,1.5px) solid var(--tbd);border-radius:11px;background:var(--tbg);margin-bottom:var(--tgap,10px);overflow:hidden}
+.tt-sgh{font:800 10px system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--tlb);background:color-mix(in srgb,var(--tbd) 22%,var(--tbg));padding:6px var(--tph,12px);border-bottom:1px solid color-mix(in srgb,var(--tbd) 45%,#fff)}
+.tt-sgb{padding:var(--tpv,10px) var(--tph,12px)}
+.tt-sgb>.tt-sf+.tt-sf,.tt-sgb>.tt-sf+.tt-lone,.tt-sgb>.tt-lone+.tt-two,.tt-sgb>.tt-sf+.tt-two{margin-top:var(--tfg,9px)}
+.tt-sg .tt-lb{display:block;font:800 11px system-ui;color:var(--tlb);margin:0 0 4px}
+.tt-sg.over .tt-ovl,.tt-rg.over .tt-ovl{display:flex}
+.tt-rgl{font:800 10px system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--tlb);margin:4px 2px 5px}
+.tt-rg{position:relative;border:var(--tbw,1.5px) solid var(--tbd);border-radius:11px;background:var(--tbg);padding:0 var(--tph,12px);margin-bottom:var(--tgap,10px)}
+.tt-rr{display:flex;align-items:center;gap:10px;padding:var(--tlp,8px) 0;border-bottom:1px solid color-mix(in srgb,var(--tbd) 40%,#fff)}
+.tt-rf{padding:var(--tlp,8px) 0;border-bottom:1px solid color-mix(in srgb,var(--tbd) 40%,#fff)}
+.tt-rr:last-child,.tt-rf:last-child{border-bottom:none}
+.tt-rr>.tt-lb{flex:0 0 36%;margin:0;font:800 12.5px system-ui;color:var(--tlb)}
+.tt-rf>.tt-lb{display:block;font:800 11.5px system-ui;color:var(--tlb);margin:0 0 4px}
+.tt-rr>.ct{flex:1;min-width:0}
+.tt-rr .tt-inp,.tt-rr .tt-sel{border:none;background:transparent;padding:4px 0;text-align:right;font-weight:700;box-shadow:none}
+.tt-rr .tt-sel{appearance:none;-webkit-appearance:none;text-align-last:right}
+.tt-rr input[type=date]{text-align:right}
+.tt-rr .tt-gar{text-align:right}
+.tt-acc{border:1.5px solid #cfdad7;border-radius:12px;background:var(--paper,#fff);overflow:hidden;margin-bottom:8px;color:var(--ink,#16201d)}
+.tt-ag{border-bottom:1.5px solid #e4ebe9}.tt-ag:last-child{border-bottom:none}
+.tt-agh{display:flex;align-items:center;gap:8px;width:100%;padding:11px 12px;border:none;background:none;text-align:left;cursor:pointer;font:800 13px system-ui;color:var(--petrol,#0e5b61)}
+.tt-agh .sm{margin-left:auto;font:700 11.5px system-ui;color:var(--muted,#5f6f6a)}
+.tt-agh .cv{font-size:11px;transition:.15s}
+.tt-ag.open .cv{transform:rotate(90deg)}
+.tt-agb{display:none;padding:2px 12px 12px}
+.tt-ag.open .tt-agb{display:block}
+.tt-skh{font:800 9px system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#5f6f6a);margin:8px 0 4px}
+.tt-skh:first-child{margin-top:0}
+.tt-skrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tt-chip.std{border-radius:10px;color:var(--muted,#5f6f6a)}
+.tt-tsw{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #cfdad7;background:var(--paper,#fff);border-radius:999px;padding:3px 10px 3px 4px;font:800 11px system-ui;color:#33433f;cursor:pointer}
+.tt-tsw i{width:20px;height:20px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1.5px #cfdad7;display:block}
+.tt-tsw.on{border-color:var(--petrol,#0e5b61);background:var(--petrol-050,#e7f1f1)}
+.tt-egen{position:relative;width:24px;height:24px;border-radius:50%;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 1.5px #cfdad7;background:conic-gradient(#e11d48,#f59e0b,#84cc16,#14b8a6,#3b82f6,#a855f7,#e11d48);cursor:pointer;flex:0 0 auto}
+.tt-egen.on{box-shadow:0 0 0 2.5px var(--ink,#16201d)}
+.tt-egen input{position:absolute;inset:-6px;width:40px;height:40px;opacity:0;cursor:pointer}
+/* Forslag 158: kvitteringer, bildevisning, kategorifilter, listevisning, tag-popup */
+.tt-img.kv{width:84px;height:108px}
+.tt-img.kv small{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.58);color:#fff;font:800 9.5px system-ui;text-align:center;padding:2px 1px;pointer-events:none}
+.tt-vw{position:fixed;inset:0;z-index:9600;background:rgba(10,16,15,.94);display:flex;flex-direction:column;color:#fff;touch-action:pan-y}
+.tt-vw .vt{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.tt-vw .vtt{font:800 14px system-ui}.tt-vw .vtt small{display:block;font:700 11.5px system-ui;color:#b9c7c3}
+.tt-vw .vx{margin-left:auto;border:1.5px solid #ffffff55;background:#ffffff18;color:#fff;border-radius:999px;padding:8px 16px;font:800 13px system-ui;cursor:pointer;display:flex;gap:6px;align-items:center}
+.tt-vw .vm{flex:1;position:relative;display:flex;align-items:center;justify-content:center;min-height:0;padding:0 56px}
+.tt-vw .vm img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;user-select:none;-webkit-user-drag:none}
+.tt-vw .va{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:64px;border:none;border-radius:12px;background:#ffffff22;color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.tt-vw .va:hover{background:#ffffff40}.tt-vw .va.l{left:4px}.tt-vw .va.r{right:4px}.tt-vw .va[disabled]{opacity:.25;cursor:default}
+.tt-vw .vd{display:flex;gap:7px;justify-content:center;padding:12px 0 6px}
+.tt-vw .vd i{width:9px;height:9px;border-radius:50%;background:#ffffff44;cursor:pointer}.tt-vw .vd i.on{background:#fff}
+.tt-vw .vh{text-align:center;font:600 11px system-ui;color:#9fb0ab;padding-bottom:14px}
+.tt-kfr{border:1.5px solid #9bb3b1;border-radius:16px;background:var(--mist,#e6edeb);padding:8px;margin-bottom:10px}
+.tt-kh{display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:2px;cursor:pointer;font:800 13px system-ui;color:var(--petrol,#0e5b61);text-align:left}
+.tt-kh .sm{margin-left:auto;font:700 11.5px system-ui;color:var(--muted,#5f6f6a);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%}
+.tt-kh .cv{font-size:10px;transition:.15s}.tt-kfr.open .tt-kh .cv{transform:rotate(90deg)}
+.tt-kfr.act{border-color:var(--petrol,#0e5b61)}.tt-kfr.act .tt-kh .sm{color:var(--petrol,#0e5b61)}
+.tt-kb{display:none;margin-top:7px}.tt-kfr.open .tt-kb{display:block}
+.tt-kr{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:7px}
+.tt-kr>b{flex:0 0 84px;font:800 10px system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#5f6f6a)}
+.tt-kc{border:1.5px solid var(--line,#cfdad7);background:var(--paper,#fff);border-radius:999px;padding:5px 11px;font:800 12px system-ui;color:var(--ink,#33433f);cursor:pointer}
+.tt-kc small{font:700 10px system-ui;color:#7a8883;margin-left:4px}
+.tt-kc.on{background:var(--petrol,#0e5b61);border-color:var(--petrol,#0e5b61);color:#fff}.tt-kc.on small{color:#cfe7e8}
+.tt-knl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font:600 11.5px system-ui;color:var(--muted,#5f6f6a)}
+.tt-knull{border:1.5px solid #9bb3b1;background:var(--paper,#fff);border-radius:999px;padding:5px 12px;font:800 11.5px system-ui;color:var(--ink,#33433f);cursor:pointer}
+.tt-ca{padding:6px 9px;gap:9px;align-items:center;margin-bottom:5px;border-radius:10px}
+.tt-ca .tt-th{width:42px;height:42px;border-radius:8px;font-size:16px}
+.tt-ca .l1{display:flex;gap:8px;align-items:baseline}
+.tt-ca .l1 .tt-t{font:800 13.5px system-ui;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt-ca .l1 .tt-v{font:800 13px system-ui;white-space:nowrap}
+.tt-ca .l2{display:flex;gap:6px;align-items:center;font:700 10.5px system-ui;color:var(--muted,#5f6f6a);margin-top:1px;white-space:nowrap;overflow:hidden}
+.tt-ca .l2 .tg{color:#9a5d12;overflow:hidden;text-overflow:ellipsis}
+.tt-ca .l3{display:flex;align-items:center;gap:6px;font:600 11px system-ui;color:var(--muted,#5f6f6a);margin-top:2px}
+.tt-ca .l3 a{color:#245a99;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.tt-ca .l3 .tt-badge{margin-top:0;padding:0 6px;font-size:10px}
+.tt-ca .l3 .tt-cp{margin-left:auto;padding:2px 7px}
+.tt-ca .tt-snip,.tt-ca .tt-treff{margin-top:3px}
+.tt-rows{background:var(--paper,#fff);border:1.5px solid var(--line,#b9c8c5);border-radius:12px;overflow:hidden;margin-bottom:6px;color:var(--ink,#16201d)}
+.tt-rw{border-bottom:1px solid var(--line,#e4ebe9)}.tt-rw:last-child{border-bottom:none}
+.tt-rwh{display:flex;align-items:center;gap:8px;padding:5px 9px;cursor:pointer;min-height:40px}
+.tt-rwh .tt-th{width:30px;height:30px;border-radius:6px;font-size:13px}
+.tt-rwh .tt-t{font:800 13px system-ui;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt-rwh .s{font:700 10.5px system-ui;color:#7a8883;white-space:nowrap;max-width:28%;overflow:hidden;text-overflow:ellipsis}
+.tt-rwh .v{font:800 12.5px system-ui;white-space:nowrap}
+.tt-rwh .cv{font-size:10px;color:var(--petrol,#0e5b61);transition:.15s}.tt-rw.open .cv{transform:rotate(90deg)}
+.tt-rwx{display:none;padding:2px 9px 9px 47px;background:var(--mist,#f7faf9)}.tt-rw.open .tt-rwx{display:block}
+.tt-rwx .act{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.tt-g2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:6px}
+.tt-tile{background:var(--paper,#fff);border:1.5px solid var(--line,#b9c8c5);border-radius:12px;padding:6px;cursor:pointer;min-width:0;color:var(--ink,#16201d)}
+.tt-tile:hover{border-color:var(--petrol,#0e5b61)}
+.tt-tile .tt-th{width:100%;height:78px;border-radius:8px;font-size:26px}
+.tt-tile .tt-t{font:800 12.5px system-ui;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt-tile .s{font:700 10.5px system-ui;color:#7a8883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt-tile .v{font:800 12.5px system-ui;color:var(--petrol,#0e5b61)}
+.tt-krow .tt-tgo{flex:1;display:flex;align-items:center;gap:8px;text-align:left;font:inherit;font-weight:700;color:inherit;padding:4px 0;cursor:pointer}
+.tt-krow .tt-tgo:hover{color:var(--petrol,#0e5b61)}
+.tt-krow .tt-tgo small{margin-left:auto;background:var(--mist,#eef2f0);border-radius:999px;padding:2px 10px}
+.tt-krow .tt-tgo i{font-style:normal;color:var(--petrol,#0e5b61);font-size:15px}
+.tt-tp{position:fixed;inset:0;z-index:9300;background:rgba(18,30,28,.5);display:flex;align-items:flex-end;justify-content:center}
+@media(min-width:700px){.tt-tp{align-items:center}}
+.tt-tps{background:var(--paper,#fff);width:100%;max-width:520px;max-height:84vh;border-radius:18px 18px 0 0;display:flex;flex-direction:column;overflow:hidden;color:var(--ink,#16201d)}
+@media(min-width:700px){.tt-tps{border-radius:18px}}
+.tt-tps .sh{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1.5px solid var(--line,#e4ebe9)}
+.tt-tps .sh h4{margin:0;font:800 16px system-ui;color:var(--petrol,#0e5b61)}.tt-tps .sh small{display:block;font:700 11.5px system-ui;color:var(--muted,#5f6f6a)}
+.tt-tps .sh .cl{margin-left:auto;border:1.5px solid #cfdad7;background:var(--paper,#fff);border-radius:999px;padding:6px 14px;font:800 12.5px system-ui;color:var(--ink,#33433f);cursor:pointer}
+.tt-tps .sb{overflow:auto;padding:8px 10px}
+.tt-tps .sf{display:flex;gap:8px;padding:10px 12px;border-top:1.5px solid var(--line,#e4ebe9);align-items:center;font:800 13px system-ui}
+.tt-tps .sf span{margin-left:auto}
+
+</style>
+</head>
+<body>
+<header class="ph-h"><div class="a">Ting &amp; Tang</div><div class="b" id="hsub"></div></header>
+<div id="warnbar"></div>
+<main id="ttv"></main>
+<nav class="ph-nav" id="nav"></nav>
+<div id="toast"></div>
+<script>
+const BUILD_NO=9, BUILD_DATE='21.10.2026';
+const TT_MAC=false;
+let toastT;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),3200);}
+
+/* ---------- LAGRING: IndexedDB (bekreftet) -> localStorage -> minne ---------- */
+const DB_KEY='tettpa-tingtang-iphone';
+let db={tt:{},meta:{}};
+let storeMode='minne', idb=null, saveErr=null, saveBusy=false, saveAgain=false, saveTimer=null, lastWarn=0;
+function openIdb(){
+  return new Promise(res=>{
+    if(!('indexedDB' in window))return res(null);
+    let req;
+    try{req=indexedDB.open(DB_KEY,1);}catch(e){return res(null);}
+    req.onupgradeneeded=()=>{try{req.result.createObjectStore('kv');}catch(e){}};
+    req.onsuccess=()=>res(req.result);
+    req.onerror=()=>res(null);
+    setTimeout(()=>res(null),2500);
+  });
+}
+function idbGet(){
+  return new Promise(res=>{
+    if(!idb)return res(null);
+    try{const r=idb.transaction('kv','readonly').objectStore('kv').get('state');
+      r.onsuccess=()=>res(r.result||null);r.onerror=()=>res(null);}catch(e){res(null);}
+  });
+}
+function idbPut(v){
+  return new Promise((res,rej)=>{
+    try{
+      const tx=idb.transaction('kv','readwrite');tx.objectStore('kv').put(v,'state');
+      tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error||new Error('IndexedDB-feil'));tx.onabort=()=>rej(tx.error||new Error('IndexedDB avbrutt'));
+    }catch(e){rej(e);}
+  });
+}
+async function load(){
+  idb=await openIdb();
+  let lsVal=null;
+  try{const raw=localStorage.getItem(DB_KEY);if(raw)lsVal=JSON.parse(raw);}catch(e){}
+  if(idb){
+    const v=await idbGet();
+    storeMode='idb';
+    const lu=(lsVal&&lsVal.meta&&lsVal.meta.updated)||0,iu=(v&&v.meta&&v.meta.updated)||0;
+    const use=(lsVal&&lu>iu)?lsVal:v;
+    if(use)db=Object.assign(db,use);
+    return;
+  }
+  try{localStorage.setItem(DB_KEY+'-probe','1');localStorage.removeItem(DB_KEY+'-probe');
+    if(lsVal)db=Object.assign(db,lsVal);
+    storeMode='local';return;}catch(e){}
+  storeMode='minne';
+}
+function save(){clearTimeout(saveTimer);saveTimer=setTimeout(doSave,160);}
+function dbSizeMB(){try{return JSON.stringify(db).length/1048576;}catch(e){return 0;}}
+function saveErrTxt(e){
+  if(!e)return 'ukjent feil';
+  const n=e.name||'';
+  if(n==='QuotaExceededError'||/quota/i.test(String(e.message||'')))return 'lagringsplassen er full (QuotaExceededError)';
+  if(n==='DataCloneError')return 'dataene kunne ikke kopieres til lagringen (DataCloneError)';
+  return (n||'Feil')+(e.message?': '+String(e.message).slice(0,120):'');
+}
+async function doSave(){
+  if(saveBusy){saveAgain=true;return;}
+  saveBusy=true;
+  try{do{saveAgain=false;await doSaveOnce();}while(saveAgain);}finally{saveBusy=false;}
+}
+async function doSaveOnce(){
+  if(!db.meta)db.meta={};
+  db.meta.updated=Date.now();
+  const causes=[];
+  if(storeMode==='idb'&&idb){
+    try{await idbPut(db);try{localStorage.removeItem(DB_KEY);}catch(e){}return saveOk();}catch(e){causes.push('IndexedDB: '+saveErrTxt(e));}
+    try{await idbPut(JSON.parse(JSON.stringify(db)));try{localStorage.removeItem(DB_KEY);}catch(e){}return saveOk();}catch(e){causes.push('IndexedDB (nytt forsøk): '+saveErrTxt(e));}
+    try{try{idb.close();}catch(e){}idb=await openIdb();if(idb){await idbPut(JSON.parse(JSON.stringify(db)));try{localStorage.removeItem(DB_KEY);}catch(e){}return saveOk();}}catch(e){causes.push('IndexedDB (ny tilkobling): '+saveErrTxt(e));}
+  }
+  if(storeMode==='local'||storeMode==='idb'){
+    try{localStorage.setItem(DB_KEY,JSON.stringify(db));return saveOk();}catch(e){causes.push('localStorage: '+saveErrTxt(e));}
+  }
+  if(storeMode==='minne'){return;}
+  saveFail(causes);
+}
+function saveOk(){if(saveErr){saveErr=null;renderWarn();toast('Lagringen fungerer igjen.');}}
+function saveFail(causes){
+  saveErr={at:Date.now(),causes:causes,mb:dbSizeMB()};
+  renderWarn();
+  if(Date.now()-lastWarn>20000){lastWarn=Date.now();toast('Lagring feilet ('+saveErr.mb.toFixed(1)+' MB): '+causes[causes.length-1]+'. Eksporter synkfila nå.');}
+}
+const WARN_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+function renderWarn(){
+  const el=document.getElementById('warnbar');
+  if(saveErr){el.className='warnbar';el.innerHTML=WARN_IC+'<div><b>Lagringen feilet</b> ('+saveErr.mb.toFixed(1)+' MB). '+saveErr.causes.map(c=>ttE(c)).join(' · ')+'. Det siste du gjorde er kanskje ikke lagret – eksporter synkfila under Synk nå.</div>';}
+  else if(storeMode==='minne'){el.className='warnbar';el.innerHTML=WARN_IC+'<div><b>Ingen lagring tilgjengelig.</b> Data forsvinner når du lukker fanen. Eksporter synkfila før du går ut.</div>';}
+  else{el.className='';el.innerHTML='';}
+}
+function ttStoreInfo(){
+  const m=storeMode==='idb'?'IndexedDB':(storeMode==='local'?'localStorage':'kun minne');
+  return 'Lagring: <b>'+m+'</b> · '+dbSizeMB().toFixed(1)+' MB'+(saveErr?' · <b style="color:var(--red)">siste lagring feilet</b>':'');
+}
+
+/* ===== TING & TANG – felles kode for TettPå 2.0 og TettPå Ting & Tang ===== */
+const TT_SYNC_APP='TettPaa-TingTang', TT_SYNC_VER=1, TT_TOMB_MS=90*864e5;
+const TT_DEF={loc:['Stua','Kontor','Kjeller','Bod'],kol:['Hjem','Verktøy','Elektronikk','Samling'],stand:['Ny','Som ny','Pen','Brukt','Slitt','Defekt']};
+const TT_KATNAVN={loc:'Lokasjon',kol:'Kolleksjon',stand:'Stand'};
+const TT_IC={
+  liste:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  kat:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z"/><circle cx="7" cy="7" r="1.5"/>',
+  tag:'<path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/>',
+  sync:'<path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
+  down:'<path d="M12 3v12m0 0-4-4m4 4 4-4M4 20h16"/>',
+  up:'<path d="M12 21V9m0 0-4 4m4-4 4 4M4 4h16"/>',
+  undo:'<path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/>',
+  chev:'<path d="m6 9 6 6 6-6"/>',
+  copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>',
+  check:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',
+  file:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/>'
+};
+function ttSvg(n){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(TT_IC[n]||'')+'</svg>';}
+function ttNormUrl(u){u=String(u||'').trim();return u&&!/^[a-z][a-z0-9+.-]*:/i.test(u)?'https://'+u:u;}
+function ttSafeUrl(u){u=ttNormUrl(u);return /^https?:\/\//i.test(u)?u:'';}
+function ttDomain(u){try{return new URL(ttNormUrl(u)).hostname.replace(/^www\./,'');}catch(e){return String(u||'');}}
+function ttOne(l,u){return [String(l||'').trim(),ttNormUrl(u)].filter(Boolean).join(' – ');}
+function ttCopy(txt,btn){
+  txt=String(txt||'');if(!txt){toast('Ingenting å kopiere.');return;}
+  const done=()=>{toast('Kopiert: '+(txt.length>60?txt.slice(0,57)+'…':txt));if(btn&&btn.isConnected){const o=btn.innerHTML;btn.classList.add('done');btn.textContent='✓ Kopiert';setTimeout(()=>{if(btn.isConnected){btn.classList.remove('done');btn.innerHTML=o;}},1500);}};
+  const fb=()=>{const a=document.createElement('textarea');a.value=txt;a.setAttribute('readonly','');a.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px';document.body.appendChild(a);a.select();try{a.setSelectionRange(0,a.value.length);}catch(e){}let ok=false;try{ok=document.execCommand('copy');}catch(e){}a.remove();if(ok)done();else toast('Kunne ikke kopiere.');};
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb);return;}}catch(e){}
+  fb();
+}
+function ttE(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* ---------- data ---------- */
+function ttD(){
+  if(!db.tt||typeof db.tt!=='object')db.tt={};
+  const t=db.tt;
+  if(!Array.isArray(t.items))t.items=[];
+  if(!Array.isArray(t.deleted))t.deleted=[];
+  if(!t.cats||typeof t.cats!=='object')t.cats={};
+  ['loc','kol','stand'].forEach(k=>{if(!Array.isArray(t.cats[k]))t.cats[k]=TT_DEF[k].slice();});
+  if(!Array.isArray(t.tags))t.tags=[];
+  if(!db.meta)db.meta={};
+  t.items.forEach(x=>{if(Array.isArray(x.bilder)&&x.bilder.some(b=>!b))x.bilder=x.bilder.filter(Boolean);});
+  return t;
+}
+function ttUid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function ttYmd(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function ttDato(s){return s?(s.slice(8,10)+'.'+s.slice(5,7)+'.'+s.slice(0,4)):'';}
+function ttKr(n){return (Math.round(Number(n)||0)).toLocaleString('nb-NO')+' kr';}
+function ttGar(d){
+  if(!d)return null;
+  const a=new Date(d+'T12:00:00'),b=new Date(ttYmd()+'T12:00:00');
+  if(isNaN(a))return null;
+  const days=Math.round((a-b)/864e5);
+  if(days<0)return {c:'exp',t:'Garanti utløpt '+ttDato(d)};
+  if(days===0)return {c:'warn',t:'Garanti utløper i dag'};
+  if(days<=90)return {c:'warn',t:'Garanti utløper om '+days+' d'};
+  return {c:'ok',t:'Garanti til '+ttDato(d)};
+}
+function ttTotal(x){return (Number(x.verdi)||0)*(Number(x.antall)||1);}
+const TT_FELT=[['alle','Alle felt'],['t','Beskriv'],['notat','Notat'],['serie','Serienummer'],['tags','Tags'],['sted','Sted'],['lev','Leverandør']];
+let ttFelt=['alle'];
+function ttWords(){return ttQ.toLowerCase().split(/\s+/).filter(Boolean);}
+function ttFval(x,f){return f==='t'?x.t:f==='notat'?x.notat:f==='serie'?x.serie:f==='tags'?(x.tags||[]).join(' '):f==='sted'?[x.loc,x.kol,x.stand].join(' '):f==='lev'?[x.lev,x.url].join(' '):'';}
+function ttFields(){return ttFelt.indexOf('alle')>=0?['t','notat','serie','tags','sted','lev']:ttFelt.slice();}
+function ttMatch(x){
+  const ws=ttWords();
+  if(!ws.length)return true;
+  const h=ttFields().map(f=>String(ttFval(x,f)==null?'':ttFval(x,f))).join(' ').toLowerCase()+(ttFelt.indexOf('alle')>=0?' '+[x.verdi,x.solgt].join(' ').toLowerCase():'');
+  return ws.every(w=>h.includes(w));
+}
+function ttHl(s){
+  s=String(s==null?'':s);const ws=ttWords();
+  if(!ws.length)return ttE(s);
+  const re=new RegExp('('+ws.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','ig');
+  let out='',last=0,m;
+  while((m=re.exec(s))){if(m[0]==='')break;out+=ttE(s.slice(last,m.index))+'<mark>'+ttE(m[0])+'</mark>';last=m.index+m[0].length;}
+  return out+ttE(s.slice(last));
+}
+function ttSnippet(s){
+  const ws=ttWords();if(!ws.length||!s)return '';
+  const low=s.toLowerCase();let at=-1;
+  ws.forEach(w=>{const i=low.indexOf(w);if(i>=0&&(at<0||i<at))at=i;});
+  if(at<0)return '';
+  const a=Math.max(0,at-28),b=Math.min(s.length,at+60);
+  return (a>0?'… ':'')+s.slice(a,b)+(b<s.length?' …':'');
+}
+function ttTreffIn(x){
+  const ws=ttWords();if(!ws.length)return [];
+  const out=[];
+  ttFields().forEach(f=>{const v=String(ttFval(x,f)||'').toLowerCase();if(ws.some(w=>v.includes(w)))out.push(TT_FELT.find(a=>a[0]===f)[1]);});
+  return out;
+}
+function ttVisible(){
+  const t=ttD();let l=t.items.filter(x=>ttMatch(x)&&ttKatMatch(x));
+  if(db.meta.ttHideSold)l=l.filter(x=>!(Number(x.solgt)>0));
+  const s=db.meta.ttSort||'nyeste';
+  l=l.slice();
+  if(s==='az')l.sort((a,b)=>(a.t||'').localeCompare(b.t||'','nb',{sensitivity:'base'}));
+  else if(s==='verdi')l.sort((a,b)=>ttTotal(b)-ttTotal(a));
+  else if(s==='garanti')l.sort((a,b)=>{const ga=a.garanti||'9999-99-99',gb=b.garanti||'9999-99-99';return ga<gb?-1:ga>gb?1:0;});
+  else l.sort((a,b)=>(b.created||0)-(a.created||0));
+  return l;
+}
+
+/* ---------- bilder ---------- */
+function ttImageFrom(file){
+  return new Promise(res=>{
+    if(!file||!ttIsImg(file)){res('');return;}
+    const r=new FileReader();
+    r.onload=()=>{const img=new Image();img.onload=()=>{
+      const max=1000;let w=img.width,h=img.height;
+      if(w>max||h>max){const sc=Math.min(max/w,max/h);w=Math.round(w*sc);h=Math.round(h*sc);}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      try{res(cv.toDataURL('image/jpeg',0.8));}catch(e){res('');}
+    };img.onerror=()=>res('');let u=String(r.result);if(!/^data:image\//.test(u)){const x=((file.name||'').match(/\.(\w+)$/)||[])[1]||'jpeg';const m={jpg:'jpeg',tif:'tiff'}[x.toLowerCase()]||x.toLowerCase();u=u.replace(/^data:[^,]*,/,'data:image/'+m+';base64,');}img.src=u;};
+    r.onerror=()=>res('');
+    r.readAsDataURL(file);
+  });
+}
+
+/* ---------- visning ---------- */
+let ttPage='liste', ttQ='', ttSyncResult='', ttSyncFrom='', ttImportName='', ttDraft=null, ttToolsOpen=false;
+function ttHost(){return document.getElementById(TT_MAC?'view':'ttv');}
+function ttActive(){return TT_MAC?(typeof current!=='undefined'&&current==='tingtang'):true;}
+function ttRowHtml(x){
+  const g=ttGar(x.garanti),b=(x.bilder||[]);
+  const sold=Number(x.solgt)>0;
+  const ws=ttWords().length>0;
+  const H=s=>ws?ttHl(s):ttE(s);
+  const sn=(ws&&ttFields().indexOf('notat')>=0)?ttSnippet(x.notat||''):'';
+  const tr=ws?ttTreffIn(x):[];
+  return '<div class="tt-card" data-ttopen="'+ttE(x.id)+'">'+
+    (b[0]?'<img class="tt-th" src="'+b[0]+'" alt="" data-ttzi="'+ttE(x.id)+'">':'<div class="tt-th">'+ttE((x.t||'?').charAt(0).toUpperCase())+'</div>')+
+    '<div class="tt-c1"><div class="tt-t">'+H(x.t||'(uten navn)')+'</div><div class="tt-meta">'+
+    (x.loc?'<span class="tt-pill loc">'+H(x.loc)+'</span>':'')+(x.kol?'<span class="tt-pill kol">'+H(x.kol)+'</span>':'')+(x.stand?'<span class="tt-pill st">'+H(x.stand)+'</span>':'')+
+    (x.tags||[]).map(t=>'<span class="tt-pill tg">#'+H(t)+'</span>').join('')+
+    (x.serie?'<span class="tt-pill">S/N '+H(x.serie)+'</span>':'')+
+    (b.length>1?'<span class="tt-pill">'+b.length+' bilder</span>':'')+((x.kvitt||[]).length?'<span class="tt-pill">'+x.kvitt.length+' kvitt.</span>':'')+'</div>'+
+    (x.lev||x.url?'<div class="tt-lev"><div class="tt-ln"><b>Leverandør</b>'+H(x.lev||'')+(x.url?(x.lev?' · ':'')+(ttSafeUrl(x.url)?'<a href="'+ttE(ttSafeUrl(x.url))+'" target="_blank" rel="noopener" data-ttlink>'+H(ttDomain(x.url))+' ↗</a>':H(x.url)):'')+'</div><button type="button" class="tt-cp" data-ttcpl="'+ttE(ttOne(x.lev,x.url))+'">'+ttSvg('copy')+'Kopier</button></div>':'')+
+    (sn?'<div class="tt-snip"><b>Notat</b>'+ttHl(sn)+'</div>':'')+
+    (tr.length?'<div class="tt-treff">Treff i: '+ttE(tr.join(', '))+'</div>':'')+
+    (g?'<div><span class="tt-badge '+g.c+'">'+ttE(g.t)+'</span></div>':'')+
+    (sold?'<div><span class="tt-badge sold">Solgt for '+ttKr(x.solgt)+'</span></div>':'')+
+    '</div><div class="tt-right"><div class="tt-v">'+(x.verdi!==''&&x.verdi!=null?ttKr(x.verdi):'')+'</div>'+((Number(x.antall)||1)>1?'<div class="tt-s">× '+ttE(x.antall)+'</div>':'')+'<button type="button" class="tt-cpt" data-ttdup="'+ttE(x.id)+'" title="Lag kopi av denne tingen" aria-label="Lag kopi">'+ttSvg('copy')+'</button></div></div>';
+}
+let ttListOpen=true, ttPer=5, ttShown=5;
+function ttLimit(n){return (ttQ.trim()||ttPer==='alle')?n:Math.min(ttShown,n);}
+function ttNText(){
+  const n=ttVisible().length,l=ttLimit(n);
+  if(!ttListOpen)return n+' ting';
+  return l<n?'viser '+l+' av '+n:n+' ting';
+}
+function ttListInner(){
+  const t=ttD(),vis=ttVisible();
+  if(!ttListOpen)return '';
+  if(!t.items.length)return '<div class="tt-empty">Ingen ting registrert ennå. Trykk «＋ Ny ting».</div>';
+  if(!vis.length){
+    const sub=ttFelt.indexOf('alle')<0?'. Prøv «Alle felt» i stedet for bare '+ttFelt.map(k=>TT_FELT.find(a=>a[0]===k)[1]).join(' + ').toLowerCase()+'.':'.';
+    return '<div class="tt-hint">'+(ttQ.trim()?'Ingen ting passer med «'+ttE(ttQ.trim())+'»'+sub:(ttKatN()?'Ingen ting passer med kategorivalgene.':'Ingen treff.'))+'</div>';
+  }
+  const l=ttLimit(vis.length);
+  return (ttQ.trim()?'<div class="tt-res">'+vis.length+' treff i '+t.items.length+' registrerte ting</div>':'')+ttRowsHtml(vis.slice(0,l))+(l<vis.length?'<button type="button" class="tt-more" data-ttmore>Vis 5 flere ('+(vis.length-l)+' igjen)</button>':'');
+}
+function ttSumHtml(){
+  const vis=ttVisible();
+  return '<span>Sum verdi</span><span>'+ttKr(vis.reduce((a,x)=>a+ttTotal(x),0))+'</span>';
+}
+function ttListHtml(){
+  const t=ttD();const s=db.meta.ttSort||'nyeste';
+  const sorts=[['nyeste','Nyeste'],['az','A–Å'],['verdi','Verdi'],['garanti','Garanti']];
+  return '<div class="tt-fr tt-tools"><button type="button" class="tt-chip'+(ttToolsOpen?' act':'')+'" data-tttools>Verktøy</button><span class="tt-vs"></span><button type="button" class="tt-chip" data-ttshare>Del</button><button type="button" class="tt-chip" data-ttfocus>Søk</button><span class="tt-vs"></span><button type="button" class="tt-chip dark" data-ttnew>＋ Ny ting</button></div>'+
+    (ttToolsOpen?'<div class="tt-fr tt-toolp"><span>Sorter:</span>'+sorts.map(a=>'<button type="button" class="tt-chip'+(s===a[0]?' act':'')+'" data-ttsort="'+a[0]+'">'+a[1]+'</button>').join('')+'<span class="tt-vs"></span><button type="button" class="tt-chip'+(db.meta.ttHideSold?' act':'')+'" data-tthidesold>Skjul solgte</button></div>'+ttLstHtml()+ttSkjemaHtml():'')+
+    '<div class="tt-sfr"><div class="tt-sok">'+ttSvg('search')+'<input id="ttq" type="text" placeholder="Søk i alle registrerte ting …" value="'+ttE(ttQ)+'"><button type="button" class="tt-x2" data-ttclr title="Tøm søket"'+(ttQ?'':' style="display:none"')+'>✕</button><span class="tt-cnt" id="ttcnt">'+ttVisible().length+' av '+t.items.length+'</span></div>'+
+    '<div class="tt-fsel"><b>Søk i</b>'+TT_FELT.map(a=>'<button type="button" data-ttfelt="'+a[0]+'" class="'+(ttFelt.indexOf(a[0])>=0?'on':'')+'">'+a[1]+'</button>').join('')+'</div></div>'+
+    ttKfHtml()+'<div class="tt-lf"><div class="tt-lh"><button type="button" class="tt-tg2'+(ttListOpen?'':' cl')+'" data-tttg>'+ttSvg('chev')+'<span>Registrerte ting</span></button><span class="tt-n" id="ttn">'+ttNText()+'</span><select id="ttvsel" class="tt-vsel"><option value="5"'+(ttPer===5?' selected':'')+'>Vis 5 av gangen</option><option value="alle"'+(ttPer==='alle'?' selected':'')+'>Vis alle</option></select></div><div id="ttlist">'+ttListInner()+'</div></div><div class="tt-sum" id="ttsum">'+ttSumHtml()+'</div>';
+}
+function ttKatHtml(){
+  const t=ttD();
+  return Object.keys(TT_KATNAVN).map(k=>'<div class="tt-panel"><h3>'+TT_KATNAVN[k]+'</h3>'+
+    (t.cats[k].length?t.cats[k].map((n,i)=>'<div class="tt-krow"><span>'+ttE(n)+'</span><small>brukt '+t.items.filter(x=>x[k]===n).length+' sted</small><button type="button" data-ttkdel="'+k+'|'+i+'" title="Fjern">'+ttSvg('x')+'</button></div>').join(''):'<div class="tt-empty" style="padding:6px">Ingen valg ennå.</div>')+
+    '<div class="tt-addk"><input type="text" data-ttkin="'+k+'" placeholder="Ny '+TT_KATNAVN[k].toLowerCase()+' …"><button type="button" class="tt-chip dark" data-ttkadd="'+k+'">＋ Legg til</button></div></div>').join('');
+}
+function ttTagsHtml(){
+  const t=ttD();
+  return '<div class="tt-panel"><h3>Tags</h3>'+
+    (t.tags.length?t.tags.map((g,i)=>'<div class="tt-krow"><button type="button" class="tt-tgo" data-tttag="'+i+'" title="Vis tingene med denne taggen"><span>#'+ttE(g)+'</span><small>brukt '+t.items.filter(x=>(x.tags||[]).includes(g)).length+' ting</small><i>›</i></button><button type="button" data-tttdel="'+i+'" title="Fjern">'+ttSvg('x')+'</button></div>').join(''):'<div class="tt-empty" style="padding:6px">Ingen tags ennå.</div>')+
+    '<div class="tt-addk"><input type="text" data-ttkin="__tag" placeholder="Ny tag …"><button type="button" class="tt-chip dark" data-ttkadd="__tag">＋ Legg til</button></div></div>';
+}
+function ttWhen(ts){if(!ts)return '';const d=new Date(ts);if(isNaN(d))return '';return d.toLocaleDateString('nb-NO',{day:'numeric',month:'long'})+' kl. '+d.toTimeString().slice(0,5);}
+function ttSyncHtml(){
+  const t=ttD();const mac=TT_MAC;
+  const nb=t.items.reduce((a,x)=>a+(x.bilder||[]).length,0);
+  let kb=0;try{kb=Math.round(JSON.stringify(ttPayload(true)).length/1024);}catch(e){}
+  let kb0=0;try{kb0=Math.round(JSON.stringify(ttPayload(false)).length/1024);}catch(e){}
+  const li=db.meta.ttLastImport;
+  const store=(typeof ttStoreInfo==='function')?ttStoreInfo():'';
+  return '<div class="tt-panel"><h3>Status</h3><div class="tt-stats"><div class="tt-stc"><b>'+t.items.length+'</b><span>Ting</span></div><div class="tt-stc"><b>'+nb+'</b><span>Bilder</span></div><div class="tt-stc"><b>'+kb+' kB</b><span>Filstørrelse</span></div></div>'+
+    '<div class="tt-meta2"><span>Sist synkronisert: <b>'+(db.meta.ttLastSync?ttE(ttWhen(db.meta.ttLastSync)):'aldri')+'</b></span><span>Fungerer begge veier – nyeste endring vinner.</span>'+(store?'<span class="tt-store">'+store+'</span>':'')+'</div></div>'+
+    '<div class="tt-panel"><h3>'+(mac?'Send til iPhone':'Send til Mac')+'</h3>'+
+    '<button type="button" class="tt-sb pri" data-ttexport="1">'+ttSvg('down')+'<div><span class="tt-tt">Eksporter med bilder</span><small>Full kopi · '+kb+' kB</small></div></button>'+
+    '<button type="button" class="tt-sb" data-ttexport="0">'+ttSvg('down')+'<div><span class="tt-tt">Eksporter uten bilder</span><small>Mindre fil · ca. '+kb0+' kB · bilder beholdes der de er</small></div></button>'+
+    '<div class="tt-fname"><b>Filnavn:</b> '+ttE(ttFilename(true))+'</div></div>'+
+    '<div class="tt-panel"><h3>'+(mac?'Hent fra iPhone':'Hent fra Mac')+'</h3>'+
+    '<button type="button" class="tt-sb" data-ttimport>'+ttSvg('up')+'<div><span class="tt-tt">Importer &amp; flett</span><small>Nyeste endring vinner – slettinger følger med</small></div></button>'+
+    '<button type="button" class="tt-sb" data-ttreplace>'+ttSvg('undo')+'<div><span class="tt-tt">Erstatt alt med fila</span><small>Ren import – ingen fletting</small></div></button>'+
+    '<div class="tt-drop" id="ttdrop">'+ttSvg('file').replace('<svg','<svg style="width:18px;height:18px;vertical-align:-4px"')+' …eller dra synkfilen hit</div>'+
+    '<input type="file" id="ttfile" accept="application/json,.json" style="display:none"><input type="file" id="ttfile2" accept="application/json,.json" style="display:none">'+
+    (ttSyncResult?'<div class="tt-res">'+(ttSyncFrom?ttSyncFrom+'<br>':'')+'<b>Resultat:</b> '+ttE(ttSyncResult)+'</div>':'')+
+    '<div class="tt-fname"><b>Sist importert:</b> '+((li&&li.at)?ttE(ttWhen(li.at))+'<br>'+ttE(li.name||''):'aldri')+'</div></div>'+ttFareHtml();
+}
+function ttSoldN(){return ttD().items.filter(x=>Number(x.solgt)>0).length;}
+function ttFareHtml(){
+  const n=ttSoldN();
+  return '<div class="tt-fz"><h3>'+ttSvg('trash')+' Faresone</h3><div class="tt-fzb"><button type="button" data-ttfz="solgt">'+ttSvg('check')+'<span>Fjern solgte ting'+(n?' ('+n+')':'')+'</span></button><button type="button" class="w" data-ttfz="alt">'+ttSvg('trash')+'<span>Slett alle data</span></button></div>'+
+    '<p class="tt-fzt">Kan ikke angres – ta gjerne en eksport først. <b>Fjern solgte ting</b> fjerner ting som har «Solgt for»-beløp. <b>Slett alle data</b> fjerner alle ting med bilder, kategorier og tags i Ting &amp; Tang'+(TT_MAC?'. Resten av TettPå 2.0 berøres ikke.':'. Appen står igjen tom.')+'</p></div>';
+}
+function ttPurgeSold(){
+  const t=ttD(),n=ttSoldN();
+  if(!n){toast('Ingen solgte ting å fjerne.');return;}
+  ttConfirm('Fjerne solgte ting?',n+' ting med «Solgt for»-beløp slettes. Slettingen følger med ved neste synk. Ta gjerne en eksport først.',()=>{
+    const now=Date.now(),keep=[];
+    t.items.forEach(x=>{if(Number(x.solgt)>0)t.deleted.push({id:x.id,deletedAt:now});else keep.push(x);});
+    t.items=keep;save();toast('Solgte ting fjernet');ttRepaint();
+  });
+}
+function ttWipeAll(){
+  const t=ttD(),nb=t.items.reduce((a,x)=>a+(x.bilder||[]).length,0);
+  ttConfirm('Slette alle data i Ting & Tang?','Alle '+t.items.length+' ting, '+nb+' bilder, kategorier og tags slettes. Dette kan ikke angres. Ta gjerne en eksport først.',()=>{
+    db.tt={};delete db.meta.ttLastSync;delete db.meta.ttLastImport;ttSyncResult='';ttSyncFrom='';ttQ='';
+    ttD();save();toast('Alle data i Ting & Tang er slettet');ttRepaint();
+  });
+}
+function ttBody(){return ttPage==='kat'?ttKatHtml():ttPage==='tags'?ttTagsHtml():ttPage==='synk'?ttSyncHtml():ttListHtml();}
+const TT_PAGES=[['liste','Ting & Tang','liste'],['kat','Kategorier','kat'],['tag','Tags','tag'],['synk','Synk','sync']];
+function ttPageKey(k){return k==='tag'?'tags':k;}
+function ttTabsMac(){
+  const n=ttD().items.length;
+  return '<div class="op-frame"><div class="cw-tabs">'+TT_PAGES.map(a=>{const k=ttPageKey(a[0]);return '<button type="button" class="cw-tab'+(ttPage===k?' on':'')+'" data-ttpage="'+k+'">'+ttSvg(a[2])+'<span>'+ttE(a[1])+'</span>'+(k==='liste'&&n?'<span class="cw-c">'+n+'</span>':'')+'</button>';}).join('')+'</div></div>';
+}
+function ttPaint(host){
+  host=host||ttHost();if(!host)return;
+  ttD();
+  host.innerHTML=(TT_MAC?ttTabsMac():'')+'<div class="tt-wrap">'+ttBody()+'</div>';
+  host.onclick=ttClick;host.oninput=ttInput;host.onchange=ttChange;host.onkeydown=ttKey;
+  if(ttPage==='synk')ttWireSync(host);
+  if(typeof ttOnPaint==='function')ttOnPaint();
+}
+function ttSetPage(p){ttPage=p;ttToolsOpen=false;ttPaint();}
+function ttRefreshList(){
+  const l=document.getElementById('ttlist');if(!l)return;
+  l.innerHTML=ttListInner();
+  const c=document.getElementById('ttcnt');if(c)c.textContent=ttVisible().length+' av '+ttD().items.length;
+  const nn=document.getElementById('ttn');if(nn)nn.textContent=ttNText();
+  const x2=document.querySelector('.tt-x2');if(x2)x2.style.display=ttQ?'':'none';
+  const s=document.getElementById('ttsum');if(s)s.innerHTML=ttSumHtml();
+}
+function ttRepaint(){if(ttActive())ttPaint();}
+
+/* ---------- hendelser ---------- */
+function ttInput(e){
+  if(e.target&&e.target.dataset&&e.target.dataset.tttemaegen!==undefined){db.meta.ttTemaEgen=e.target.value;db.meta.ttTema='egen';ttSkjemaTouch();return;}
+  if(e.target&&e.target.id==='ttq'){ttQ=e.target.value;ttShown=5;ttRefreshList();}
+  if(e.target&&e.target.id==='ttvsel'){ttPer=e.target.value==='alle'?'alle':5;ttShown=5;ttRefreshList();}
+}
+function ttChange(e){const i=e.target;if(i&&i.dataset&&i.dataset.tttemaegen!==undefined){db.meta.ttTemaEgen=i.value;db.meta.ttTema='egen';ttSkjemaTouch();ttPaint();}}
+function ttKey(e){
+  const k=e.target&&e.target.dataset&&e.target.dataset.ttkin;
+  if(e.key==='Enter'&&k){e.preventDefault();const b=document.querySelector('[data-ttkadd="'+k+'"]');if(b)b.click();}
+}
+function ttClick(e){
+  const T=s=>e.target.closest&&e.target.closest(s);
+  let el;
+  if((el=T('[data-ttpage]'))){ttSetPage(el.dataset.ttpage);return;}
+  if(T('[data-ttnew]')){ttOpen(0);return;}
+  if(T('a[data-ttlink]'))return;
+  if((el=T('[data-ttcpl]'))){ttCopy(el.dataset.ttcpl,el);return;}
+  if((el=T('[data-ttdup]'))){ttOpen(el.dataset.ttdup,true);return;}
+  if((el=T('[data-ttzi]'))){const x=ttD().items.find(a=>a.id===el.dataset.ttzi);if(x&&(x.bilder||[]).length){ttViewer(x.bilder,0,'Bilde');return;}}
+  if((el=T('[data-ttrb]'))){ttRowOpen=ttRowOpen===el.dataset.ttrb?null:el.dataset.ttrb;ttRefreshList();return;}
+  if((el=T('[data-ttls]'))){db.meta.ttLst=el.dataset.ttls;save();ttPaint();return;}
+  if(T('[data-ttko]')){ttKatOpen=!ttKatOpen;ttPaint();return;}
+  if((el=T('[data-ttkv]'))){const f=ttKatF(),k=el.dataset.ttkv,v=el.dataset.ttkval,i=f[k].indexOf(v);if(i>=0)f[k].splice(i,1);else f[k].push(v);ttShown=5;save();ttPaint();return;}
+  if(T('[data-ttkn]')){const f=ttKatF();f.loc=[];f.kol=[];f.stand=[];ttShown=5;save();ttPaint();return;}
+  if((el=T('[data-tttag]'))){const g=ttD().tags[+el.dataset.tttag];if(g)ttTagPop(g);return;}
+  if((el=T('[data-ttopen]'))){ttOpen(el.dataset.ttopen);return;}
+  if((el=T('[data-ttfelt]'))){
+    const k=el.dataset.ttfelt;
+    if(k==='alle')ttFelt=['alle'];
+    else{ttFelt=ttFelt.filter(x=>x!=='alle');const i=ttFelt.indexOf(k);if(i>=0)ttFelt.splice(i,1);else ttFelt.push(k);if(!ttFelt.length)ttFelt=['alle'];}
+    ttPaint();const i2=document.getElementById('ttq');if(i2&&ttQ){i2.focus();i2.setSelectionRange(ttQ.length,ttQ.length);}return;
+  }
+  if(T('[data-ttclr]')){ttQ='';ttPaint();const i3=document.getElementById('ttq');if(i3)i3.focus();return;}
+  if(T('[data-tttg]')){ttListOpen=!ttListOpen;ttPaint();return;}
+  if(T('[data-ttmore]')){ttShown+=5;ttRefreshList();return;}
+  if(T('[data-ttfocus]')){const i=document.getElementById('ttq');if(i)i.focus();return;}
+  if(T('[data-tttools]')){ttToolsOpen=!ttToolsOpen;ttPaint();return;}
+  if((el=T('[data-ttopenk]'))){const k=el.dataset.ttopenk;db.meta.ttOpenK=ttOpenK()===k?'':k;save();ttPaint();return;}
+  if((el=T('[data-ttlay]'))){db.meta.ttLay=el.dataset.ttlay;ttSkjemaTouch();ttPaint();return;}
+  if((el=T('[data-ttdens]'))){db.meta.ttDens=el.dataset.ttdens;ttSkjemaTouch();ttPaint();return;}
+  if((el=T('[data-tttema]'))){db.meta.ttTema=el.dataset.tttema;ttSkjemaTouch();ttPaint();return;}
+  if(T('[data-ttskreset]')){db.meta.ttLay='kort';db.meta.ttDens='normal';ttSkjemaTouch();ttPaint();return;}
+  if((el=T('[data-ttsort]'))){db.meta.ttSort=el.dataset.ttsort;save();ttPaint();return;}
+  if(T('[data-tthidesold]')){db.meta.ttHideSold=!db.meta.ttHideSold;save();ttPaint();return;}
+  if(T('[data-ttshare]')){ttShare();return;}
+  if((el=T('[data-ttkadd]'))){
+    const k=el.dataset.ttkadd;const i=document.querySelector('[data-ttkin="'+k+'"]');const v=i?i.value.trim().replace(/^#/,''):'';
+    if(!v)return;const t=ttD();
+    if(k==='__tag'){if(!t.tags.includes(v))t.tags.push(v);}else{if(!t.cats[k].includes(v))t.cats[k].push(v);}
+    save();ttPaint();return;
+  }
+  if((el=T('[data-ttkdel]'))){const p=el.dataset.ttkdel.split('|');ttD().cats[p[0]].splice(+p[1],1);save();ttPaint();return;}
+  if((el=T('[data-tttdel]'))){
+    const t=ttD();const g=t.tags.splice(+el.dataset.tttdel,1)[0];const now=Date.now();
+    t.items.forEach(x=>{if((x.tags||[]).includes(g)){x.tags=x.tags.filter(y=>y!==g);x.updated=now;}});
+    save();ttPaint();return;
+  }
+  if((el=T('[data-ttfz]'))){if(el.dataset.ttfz==='solgt')ttPurgeSold();else ttWipeAll();return;}
+  if((el=T('[data-ttexport]'))){ttDevicePick(el.dataset.ttexport==='1');return;}
+  if(T('[data-ttimport]')){const f=document.getElementById('ttfile');if(f)f.click();return;}
+  if(T('[data-ttreplace]')){const f=document.getElementById('ttfile2');if(f)f.click();return;}
+}
+function ttShare(){
+  const vis=ttVisible();
+  if(!vis.length){toast('Ingen ting å dele.');return;}
+  const txt='Ting & Tang ('+vis.length+')\n\n'+vis.map(x=>[x.t,[x.loc,x.kol,x.stand].filter(Boolean).join(' · '),x.serie?'S/N '+x.serie:'',x.verdi!==''&&x.verdi!=null?ttKr(x.verdi)+((Number(x.antall)||1)>1?' × '+x.antall:''):'',x.garanti?'Garanti til '+ttDato(x.garanti):'',(x.lev||x.url)?'Fra '+ttOne(x.lev,x.url):'',Number(x.solgt)>0?'Solgt for '+ttKr(x.solgt):''].filter(Boolean).join(' – ')).join('\n');
+  try{if(navigator.share){navigator.share({title:'Ting & Tang',text:txt}).catch(()=>{});return;}}catch(e){}
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Lista er kopiert.'),()=>toast('Kunne ikke kopiere.'));return;}}catch(e){}
+  toast('Kunne ikke dele lista her.');
+}
+
+/* ---------- registreringsvindu ---------- */
+function ttCloseDlg(){ttCamStop();const b=document.getElementById('ttback');if(b)b.remove();ttDraft=null;}
+function ttOpen(id,kopi){
+  const t=ttD();
+  const ex=id?t.items.find(x=>x.id===id):null;
+  if(id&&!ex)return;
+  ttDraft=ex?JSON.parse(JSON.stringify(ex)):{id:'',t:'',loc:'',kol:'',stand:'',antall:1,serie:'',verdi:'',solgt:'',tags:[],bilder:[],kvitt:[],notat:'',garanti:'',addk:'',lev:'',url:'',anskaffet:''};
+  if(ex&&kopi){ttDraft.kopiAv=ex.t||'';ttDraft.id='';ttDraft.t=(ex.t||'')+' (kopi)';ttDraft.serie='';ttDraft.solgt='';delete ttDraft.created;delete ttDraft.updated;}
+  if(!Array.isArray(ttDraft.kvitt))ttDraft.kvitt=[];
+  ttDraft.addk='';ttDraft.delAsk=false;ttDraft.pend='';
+  let b=document.getElementById('ttback');
+  if(!b){
+    b=document.createElement('div');b.className='tt-back';b.id='ttback';
+    b.innerHTML='<div class="tt-dlg" id="ttdlg"></div>';
+    document.body.appendChild(b);
+    b.addEventListener('mousedown',e=>{if(e.target===b)ttCloseDlg();});
+    b.addEventListener('click',ttDlgClick);
+    b.addEventListener('change',ttDlgChange);
+    b.addEventListener('input',ttDlgInput);
+    b.addEventListener('keydown',ttDlgKey);
+    ttWireDrop(b);
+  }
+  ttDlgDraw();
+  setTimeout(()=>{const f=document.getElementById('ttf_t'),ae=document.activeElement;if(f&&ttDraft&&!ttDraft.id&&(!ae||ae===document.body||!(ae.closest&&ae.closest('#ttdlg'))))f.focus();},40);
+}
+/* ===== Forslag 158: kvitteringer, bildevisning, kategorifilter, listevisning, tag-popup ===== */
+function ttLst(){const v=db.meta&&db.meta.ttLst;return (v==='B'||v==='C'||v==='N')?v:'A';}
+let ttRowOpen=null,ttKatOpen=false;
+function ttKatF(){
+  const t=ttD();let f=db.meta.ttKatF;if(!f||typeof f!=='object')f=db.meta.ttKatF={};
+  ['loc','kol','stand'].forEach(k=>{f[k]=Array.isArray(f[k])?f[k].filter(v=>t.cats[k].includes(v)):[];});
+  return f;
+}
+function ttKatN(){const f=ttKatF();return f.loc.length+f.kol.length+f.stand.length;}
+function ttKatMatch(x){const f=ttKatF();return ['loc','kol','stand'].every(k=>!f[k].length||f[k].includes(x[k]));}
+function ttKfHtml(){
+  const t=ttD(),f=ttKatF(),n=ttKatN();
+  const sum=n?n+' valgt · '+f.loc.concat(f.kol,f.stand).join(', '):'Alle';
+  const rows=Object.keys(TT_KATNAVN).map(k=>{
+    const vals=t.cats[k].slice().sort((a,b)=>a.localeCompare(b,'nb',{sensitivity:'base'}));
+    return '<div class="tt-kr"><b>'+TT_KATNAVN[k]+'</b>'+(vals.length?vals.map(v=>'<button type="button" class="tt-kc'+(f[k].includes(v)?' on':'')+'" data-ttkv="'+k+'" data-ttkval="'+ttE(v)+'">'+ttE(v)+'<small>'+t.items.filter(x=>x[k]===v).length+'</small></button>').join(''):'<span style="font:600 11.5px system-ui;color:#7a8883">Ingen valg ennå</span>')+'</div>';}).join('');
+  return '<div class="tt-kfr'+(ttKatOpen?' open':'')+(n?' act':'')+'"><button type="button" class="tt-kh" data-ttko><span>Kategori</span><span class="sm">'+ttE(sum)+'</span><span class="cv">▶</span></button><div class="tt-kb">'+rows+'<div class="tt-knl"><button type="button" class="tt-knull" data-ttkn>↺ Nullstill</button><span>'+(n?'Viser kun tingene som passer med valgene.':'Ingenting valgt – alle ting vises.')+'</span></div></div></div>';
+}
+function ttLstHtml(){
+  const c=ttLst();
+  return '<div class="tt-fr tt-toolp"><span>Liste:</span>'+[['A','Kompakt'],['B','Rad'],['C','Rutenett'],['N','Detaljert']].map(a=>'<button type="button" class="tt-chip'+(c===a[0]?' act':'')+'" data-ttls="'+a[0]+'">'+a[1]+'</button>').join('')+'</div>';
+}
+function ttThumb(x,cls){const b=x.bilder||[];return b[0]?'<img class="tt-th" src="'+b[0]+'" alt="" data-ttzi="'+ttE(x.id)+'">':'<div class="tt-th">'+ttE((x.t||'?').charAt(0).toUpperCase())+'</div>';}
+function ttPillsH(x,H){const b=x.bilder||[],kv=x.kvitt||[];
+  return (x.loc?'<span class="tt-pill loc">'+H(x.loc)+'</span>':'')+(x.kol?'<span class="tt-pill kol">'+H(x.kol)+'</span>':'')+(x.stand?'<span class="tt-pill st">'+H(x.stand)+'</span>':'')+
+    (x.tags||[]).map(t=>'<span class="tt-pill tg">#'+H(t)+'</span>').join('')+(x.serie?'<span class="tt-pill">S/N '+H(x.serie)+'</span>':'')+
+    (b.length>1?'<span class="tt-pill">'+b.length+' bilder</span>':'')+(kv.length?'<span class="tt-pill">'+kv.length+' kvitt.</span>':'');}
+function ttLevH(x,H){
+  if(!(x.lev||x.url))return '';
+  return '<div class="tt-lev"><div class="tt-ln"><b>Leverandør</b>'+H(x.lev||'')+(x.url?(x.lev?' · ':'')+(ttSafeUrl(x.url)?'<a href="'+ttE(ttSafeUrl(x.url))+'" target="_blank" rel="noopener" data-ttlink>'+H(ttDomain(x.url))+' ↗</a>':H(x.url)):'')+'</div><button type="button" class="tt-cp" data-ttcpl="'+ttE(ttOne(x.lev,x.url))+'">'+ttSvg('copy')+'Kopier</button></div>';
+}
+function ttRowCtx(x){const ws=ttWords().length>0;const H=s=>ws?ttHl(s):ttE(s);
+  const sn=(ws&&ttFields().indexOf('notat')>=0)?ttSnippet(x.notat||''):'';const tr=ws?ttTreffIn(x):[];
+  return {H:H,sn:sn,tr:tr,g:ttGar(x.garanti),sold:Number(x.solgt)>0};}
+function ttRowA(x){
+  const c=ttRowCtx(x),H=c.H,b=x.bilder||[],kv=x.kvitt||[];
+  const loc=[x.loc,x.kol,x.stand].filter(Boolean).map(H).join(' · ');
+  return '<div class="tt-card tt-ca" data-ttopen="'+ttE(x.id)+'">'+ttThumb(x)+'<div class="tt-c1">'+
+    '<div class="l1"><span class="tt-t">'+H(x.t||'(uten navn)')+'</span><span class="tt-v">'+(x.verdi!==''&&x.verdi!=null?ttKr(x.verdi):'')+((Number(x.antall)||1)>1?' × '+ttE(x.antall):'')+'</span></div>'+
+    '<div class="l2"><span>'+loc+'</span>'+((x.tags||[]).length?'<span class="tg">'+(x.tags||[]).map(t=>'#'+H(t)).join(' ')+'</span>':'')+(b.length>1?'<span>· '+b.length+' bilder</span>':'')+(kv.length?'<span>· '+kv.length+' kvitt.</span>':'')+(x.serie?'<span>· S/N '+H(x.serie)+'</span>':'')+'</div>'+
+    ((x.lev||x.url||c.g||c.sold)?'<div class="l3">'+((x.lev||x.url)?'<span>'+H(x.lev||'')+(x.lev&&x.url?' ·':'')+'</span>'+(x.url?(ttSafeUrl(x.url)?'<a href="'+ttE(ttSafeUrl(x.url))+'" target="_blank" rel="noopener" data-ttlink>'+H(ttDomain(x.url))+' ↗</a>':'<span>'+H(x.url)+'</span>'):''):'')+(c.g?'<span class="tt-badge '+c.g.c+'">'+ttE(c.g.t)+'</span>':'')+(c.sold?'<span class="tt-badge sold">Solgt for '+ttKr(x.solgt)+'</span>':'')+((x.lev||x.url)?'<button type="button" class="tt-cp" data-ttcpl="'+ttE(ttOne(x.lev,x.url))+'" title="Kopier leverandør" aria-label="Kopier leverandør">'+ttSvg('copy')+'</button>':'')+'</div>':'')+
+    (c.sn?'<div class="tt-snip"><b>Notat</b>'+ttHl(c.sn)+'</div>':'')+(c.tr.length?'<div class="tt-treff">Treff i: '+ttE(c.tr.join(', '))+'</div>':'')+
+    '</div></div>';
+}
+function ttRowB(x){
+  const c=ttRowCtx(x),H=c.H,o=ttRowOpen===x.id;
+  return '<div class="tt-rw'+(o?' open':'')+'"><div class="tt-rwh" data-ttrb="'+ttE(x.id)+'">'+ttThumb(x)+'<span class="tt-t">'+H(x.t||'(uten navn)')+'</span><span class="s">'+ttE(x.loc||'')+'</span><span class="v">'+(x.verdi!==''&&x.verdi!=null?ttKr(x.verdi):'')+'</span><span class="cv">▶</span></div>'+
+    '<div class="tt-rwx"><div class="tt-meta">'+ttPillsH(x,H)+'</div>'+ttLevH(x,H)+(c.g?'<div><span class="tt-badge '+c.g.c+'">'+ttE(c.g.t)+'</span></div>':'')+(c.sold?'<div><span class="tt-badge sold">Solgt for '+ttKr(x.solgt)+'</span></div>':'')+
+    (c.sn?'<div class="tt-snip"><b>Notat</b>'+ttHl(c.sn)+'</div>':'')+(c.tr.length?'<div class="tt-treff">Treff i: '+ttE(c.tr.join(', '))+'</div>':'')+
+    '<div class="act"><button type="button" class="tt-chip" data-ttopen="'+ttE(x.id)+'">Åpne</button><button type="button" class="tt-chip" data-ttdup="'+ttE(x.id)+'">'+ttSvg('copy')+' Lag kopi</button></div></div></div>';
+}
+function ttTileC(x){
+  const c=ttRowCtx(x),H=c.H;
+  return '<div class="tt-tile" data-ttopen="'+ttE(x.id)+'">'+ttThumb(x)+'<div class="tt-t">'+H(x.t||'(uten navn)')+'</div><div class="s">'+[x.loc,x.kol].filter(Boolean).map(H).join(' · ')+'</div><div class="v">'+(x.verdi!==''&&x.verdi!=null?ttKr(x.verdi):'&nbsp;')+'</div></div>';
+}
+function ttRowsHtml(arr){
+  const s=ttLst();
+  if(s==='A')return arr.map(ttRowA).join('');
+  if(s==='B')return '<div class="tt-rows">'+arr.map(ttRowB).join('')+'</div>';
+  if(s==='C')return '<div class="tt-g2">'+arr.map(ttTileC).join('')+'</div>';
+  return arr.map(ttRowHtml).join('');
+}
+/* bildevisning med piler */
+let ttVw=null,ttVx0=null;
+function ttViewer(list,i,label){
+  list=(list||[]).filter(Boolean);if(!list.length)return;
+  ttVw={list:list,i:Math.max(0,Math.min(i||0,list.length-1)),label:label||'Bilde'};
+  let el=document.getElementById('ttvw');
+  if(!el){el=document.createElement('div');el.id='ttvw';el.className='tt-vw';document.body.appendChild(el);
+    el.addEventListener('click',ttVwClick);
+    el.addEventListener('pointerdown',e=>{ttVx0=e.clientX;});
+    el.addEventListener('pointerup',e=>{if(ttVx0==null)return;const dx=e.clientX-ttVx0;ttVx0=null;if(Math.abs(dx)>50)ttVwGo(dx<0?1:-1);});}
+  ttVwDraw();
+}
+function ttVwDraw(){
+  const el=document.getElementById('ttvw');if(!el||!ttVw)return;const n=ttVw.list.length,i=ttVw.i;
+  el.innerHTML='<div class="vt"><div class="vtt">'+ttE(ttVw.label)+(n>1?' '+(i+1)+' av '+n:'')+'<small>'+(n>1?'Bla med pilene eller sveip':'Ett bilde')+'</small></div><button type="button" class="vx" data-ttvx>✕ Lukk</button></div>'+
+    '<div class="vm"><img src="'+ttVw.list[i]+'" alt="">'+(n>1?'<button type="button" class="va l" data-ttvp aria-label="Forrige"'+(i===0?' disabled':'')+'>‹</button><button type="button" class="va r" data-ttvn aria-label="Neste"'+(i===n-1?' disabled':'')+'>›</button>':'')+'</div>'+
+    (n>1?'<div class="vd">'+ttVw.list.map((_,k)=>'<i class="'+(k===i?'on':'')+'" data-ttvd="'+k+'"></i>').join('')+'</div>':'')+'<div class="vh">'+(n>1?'← → på tastaturet · ':'')+'Esc lukker</div>';
+}
+function ttVwGo(d){if(!ttVw)return;const k=ttVw.i+d;if(k<0||k>=ttVw.list.length)return;ttVw.i=k;ttVwDraw();}
+function ttVwClose(){ttVw=null;const el=document.getElementById('ttvw');if(el)el.remove();}
+function ttVwClick(e){
+  const T=s=>e.target.closest&&e.target.closest(s);let el;
+  if(T('[data-ttvx]')){ttVwClose();return;}
+  if(T('[data-ttvp]')){ttVwGo(-1);return;}
+  if(T('[data-ttvn]')){ttVwGo(1);return;}
+  if((el=T('[data-ttvd]'))){ttVw.i=+el.dataset.ttvd;ttVwDraw();return;}
+}
+document.addEventListener('keydown',e=>{
+  if(ttVw){
+    if(e.key==='Escape'){e.stopImmediatePropagation();e.preventDefault();ttVwClose();}
+    else if(e.key==='ArrowLeft'){e.stopImmediatePropagation();ttVwGo(-1);}
+    else if(e.key==='ArrowRight'){e.stopImmediatePropagation();ttVwGo(1);}
+    return;
+  }
+  if(e.key==='Escape'){const p=document.getElementById('tttp');if(p){e.stopImmediatePropagation();p.remove();}}
+},true);
+/* tag-popup */
+function ttTagPop(g){
+  const t=ttD();const l=t.items.filter(x=>(x.tags||[]).includes(g)).sort((a,b)=>(a.t||'').localeCompare(b.t||'','nb',{sensitivity:'base'}));
+  const old=document.getElementById('tttp');if(old)old.remove();
+  const p=document.createElement('div');p.className='tt-tp';p.id='tttp';p.dataset.tag=g;
+  p.innerHTML='<div class="tt-tps"><div class="sh"><div><h4>#'+ttE(g)+'</h4><small>'+l.length+' ting registrert med denne taggen</small></div><button type="button" class="cl" data-tttpx>✕ Lukk</button></div><div class="sb">'+
+    (l.length?'<div class="tt-rows">'+l.map(x=>'<div class="tt-rw"><div class="tt-rwh" data-tttpo="'+ttE(x.id)+'">'+ttThumb(x)+'<span class="tt-t">'+ttE(x.t||'(uten navn)')+'</span><span class="s">'+ttE([x.loc,x.kol].filter(Boolean).join(' · '))+'</span><span class="v">'+(x.verdi!==''&&x.verdi!=null?ttKr(x.verdi):'')+'</span></div></div>').join('')+'</div>':'<div class="tt-empty">Ingen ting har denne taggen.</div>')+
+    '</div><div class="sf"><button type="button" class="tt-chip" data-tttpl>Vis i listen</button><span>Sum '+ttKr(l.reduce((a,x)=>a+ttTotal(x),0))+'</span></div></div>';
+  document.body.appendChild(p);
+  p.addEventListener('click',e=>{
+    const T=s=>e.target.closest&&e.target.closest(s);let el;
+    if(e.target===p||T('[data-tttpx]')){p.remove();return;}
+    if(T('[data-ttzi]')){const x=t.items.find(a=>a.id===T('[data-ttzi]').dataset.ttzi);if(x)ttViewer(x.bilder,0,'Bilde');return;}
+    if((el=T('[data-tttpo]'))){const id=el.dataset.tttpo;p.remove();ttOpen(id);return;}
+    if(T('[data-tttpl]')){p.remove();ttPage='liste';ttQ=g;ttFelt=['tags'];ttShown=5;ttPaint();return;}
+  });
+}
+/* ===== Forslag 156: skjema-oppsett og tema (Ny ting) ===== */
+const TT_TEMA={petrol:{n:'Petrol',bd:'#0e5b61',bg:'#e7f1f1',lb:'#0b4a4f',ib:'#9cc4c6',bw:'2px'},lys:{n:'Lys',bd:'#cfdad7',bg:'#ffffff',lb:'#0e5b61',ib:'#cfdad7',bw:'1.5px'},sand:{n:'Sand',bd:'#e3c89a',bg:'#fbf3e4',lb:'#8a5413',ib:'#e3c89a',bw:'1.5px'},salvie:{n:'Salvie',bd:'#b6cdb0',bg:'#eef5ea',lb:'#35592b',ib:'#b6cdb0',bw:'1.5px'},skifer:{n:'Skifer',bd:'#bcc5cb',bg:'#eef1f4',lb:'#3a4650',ib:'#bcc5cb',bw:'1.5px'}};
+const TT_KODET={hva:'#0e5b61',plass:'#12756c',tall:'#b0295f',kjop:'#c2410c',tags:'#5f8a12',bilder:'#4b5a66',kvitt:'#b45309',notat:'#7e22ce'};
+const TT_LAYN={kort:'Kort',samlet:'Samlet',rader:'Rader'};
+function ttLay(){const v=db.meta&&db.meta.ttLay;return (v==='kort'||v==='rader')?v:'samlet';}
+function ttDens(){return (db.meta&&db.meta.ttDens==='kompakt')?'kompakt':'normal';}
+function ttTema(){const v=db.meta&&db.meta.ttTema;return (v==='kodet'||v==='egen'||TT_TEMA[v])?v:'lys';}
+function ttEgen(){const c=db.meta&&db.meta.ttTemaEgen;return /^#[0-9a-fA-F]{6}$/.test(c||'')?c:'#12756c';}
+function ttOpenK(){const o=db.meta&&db.meta.ttOpenK;return typeof o==='string'?o:'skjema';}
+function ttTemaNavn(){const t=ttTema();return t==='kodet'?'Fargekodet':t==='egen'?'Egen farge':TT_TEMA[t].n;}
+function ttMix(c,p,w){return 'color-mix(in srgb,'+c+' '+p+'%,'+w+')';}
+function ttSt(g){
+  const L=ttLay(),T=ttTema();if(L==='kort'&&T==='petrol')return '';
+  let v;
+  if(T==='kodet'||T==='egen'){const c=T==='egen'?ttEgen():(TT_KODET[g]||'#0e5b61');v={bd:ttMix(c,55,'#fff'),bg:ttMix(c,9,'#fff'),lb:ttMix(c,80,'#000'),ib:ttMix(c,40,'#fff'),bw:'1.5px'};}else v=TT_TEMA[T];
+  return ' style="--tbd:'+v.bd+';--tbg:'+v.bg+';--tlb:'+v.lb+';--tib:'+v.ib+';--tbw:'+v.bw+'"';
+}
+function ttSkjemaTouch(){db.meta.ttSkjemaAt=Date.now();save();}
+function ttSkjemaIn(d,force){
+  const s=d&&d.skjema;if(!s||typeof s!=='object')return;
+  const at=Number(s.at)||0;if(!force&&at<=(db.meta.ttSkjemaAt||0))return;
+  if(s.lay==='kort'||s.lay==='samlet'||s.lay==='rader')db.meta.ttLay=s.lay;
+  if(s.dens==='normal'||s.dens==='kompakt')db.meta.ttDens=s.dens;
+  if(s.tema==='kodet'||s.tema==='egen'||TT_TEMA[s.tema])db.meta.ttTema=s.tema;
+  if(/^#[0-9a-fA-F]{6}$/.test(s.egen||''))db.meta.ttTemaEgen=s.egen;
+  db.meta.ttSkjemaAt=at||Date.now();
+}
+function ttSkjemaHtml(){
+  const L=ttLay(),D=ttDens(),T=ttTema(),op=ttOpenK();
+  const seg=(a,cur,at)=>a.map(x=>'<button type="button" class="tt-chip'+(cur===x[0]?' act':'')+'" '+at+'="'+x[0]+'">'+x[1]+'</button>').join('');
+  const sw=Object.keys(TT_TEMA).map(k=>'<button type="button" class="tt-tsw'+(T===k?' on':'')+'" data-tttema="'+k+'"><i style="background:'+TT_TEMA[k].bg+';border-color:'+TT_TEMA[k].bd+'"></i>'+TT_TEMA[k].n+'</button>').join('')+
+    '<button type="button" class="tt-tsw'+(T==='kodet'?' on':'')+'" data-tttema="kodet"><i style="background:conic-gradient(#12756c 0 25%,#b0295f 0 50%,#c2410c 0 75%,#5f8a12 0)"></i>Fargekodet</button>';
+  const grp=(k,t,sm,body)=>'<div class="tt-ag'+(op===k?' open':'')+'"><button type="button" class="tt-agh" data-ttopenk="'+k+'"><span>'+t+'</span><span class="sm">'+ttE(sm)+'</span><span class="cv">▶</span></button><div class="tt-agb">'+body+'</div></div>';
+  return '<div class="tt-acc">'+
+    grp('skjema','Skjema oppsett',TT_LAYN[L]+' · '+(D==='kompakt'?'Kompakt':'Normal'),
+      '<div class="tt-skh">Oppsett</div><div class="tt-skrow">'+seg([['kort','Kort'],['samlet','Samlet'],['rader','Rader']],L,'data-ttlay')+'</div><div class="tt-skh">Luft</div><div class="tt-skrow">'+seg([['normal','Normal'],['kompakt','Kompakt']],D,'data-ttdens')+'<button type="button" class="tt-chip std" data-ttskreset>↺ Som før</button></div>')+
+    grp('tema','Tema',ttTemaNavn(),
+      '<div class="tt-skrow">'+sw+'<label class="tt-egen'+(T==='egen'?' on':'')+'" title="Egen farge"><input type="color" value="'+ttEgen()+'" data-tttemaegen></label><button type="button" class="tt-chip std" data-tttema="lys">↺ Standard</button></div>')+
+    '</div>';
+}
+function ttSelCtl(k){
+  const t=ttD();const cur=ttDraft[k];
+  const opts=t.cats[k].slice();if(cur&&!opts.includes(cur))opts.push(cur);
+  return '<div class="tt-katrow"><select class="tt-sel" data-ttf="'+k+'"><option value="">Velg …</option>'+opts.map(n=>'<option value="'+ttE(n)+'"'+(cur===n?' selected':'')+'>'+ttE(n)+'</option>').join('')+'</select><button type="button" data-ttknew="'+k+'" title="Ny">＋</button></div>';
+}
+function ttSelAdd(k){return ttDraft.addk===k?'<div class="tt-katrow" style="margin-top:6px"><input class="tt-inp" id="ttkn_in" data-ttnewin="'+k+'" placeholder="Ny '+TT_KATNAVN[k].toLowerCase()+' …"><button type="button" data-ttkok="'+k+'">OK</button></div>':'';}
+function ttDlgDraw(){
+  const d=ttDraft,t=ttD();if(!d)return;
+  const g=ttGar(d.garanti);
+  const sug=t.tags.filter(x=>!d.tags.includes(x));
+  const dlg=document.getElementById('ttdlg');if(!dlg)return;
+  const L=ttLay();
+  dlg.className='tt-dlg'+(ttDens()==='kompakt'?' tt-k':'');
+  const C={
+    t:'<input class="tt-inp" id="ttf_t" data-ttf="t" value="'+ttE(d.t)+'" placeholder="Hva er det? F.eks. Gibson Les Paul 1998">',
+    antall:'<input class="tt-inp" type="number" min="1" inputmode="numeric" data-ttf="antall" value="'+ttE(d.antall)+'">',
+    serie:'<input class="tt-inp" data-ttf="serie" value="'+ttE(d.serie)+'">',
+    verdi:'<input class="tt-inp" type="number" min="0" inputmode="decimal" data-ttf="verdi" value="'+ttE(d.verdi)+'">',
+    solgt:'<input class="tt-inp" type="number" min="0" inputmode="decimal" data-ttf="solgt" value="'+ttE(d.solgt)+'">',
+    lev:'<div class="tt-lrow"><input class="tt-inp" id="ttf_lev" data-ttf="lev" value="'+ttE(d.lev)+'" placeholder="Hvor ble den kjøpt? F.eks. Thomann"><button type="button" class="tt-cp big" data-ttcp="lev">'+ttSvg('copy')+'Kopier</button></div>',
+    url:'<div class="tt-lrow"><input class="tt-inp" id="ttf_url" data-ttf="url" value="'+ttE(d.url)+'" placeholder="https://…" inputmode="url" autocapitalize="off" autocorrect="off"><a class="tt-op" id="ttop" target="_blank" rel="noopener"'+(ttSafeUrl(d.url)?' href="'+ttE(ttSafeUrl(d.url))+'"':' style="display:none"')+'>Åpne ↗</a><button type="button" class="tt-cp big" data-ttcp="url">'+ttSvg('copy')+'Kopier</button></div>',
+    lone:'<div class="tt-lone"><div class="tx" id="ttlone">'+ttE(ttOne(d.lev,d.url)||'Fyll ut feltene for å kopiere en linje')+'</div><button type="button" class="tt-cp pri" data-ttcpone>'+ttSvg('copy')+'Kopier som én linje</button></div>',
+    ansk:'<input class="tt-inp" type="date" data-ttf="anskaffet" value="'+ttE(d.anskaffet)+'">',
+    gar:'<input class="tt-inp" type="date" data-ttf="garanti" value="'+ttE(d.garanti)+'">'+(g?'<div class="tt-gar"><span class="tt-badge '+g.c+'">'+ttE(g.t)+'</span></div>':''),
+    tags:'<div class="tt-tagbox">'+d.tags.map((x,i)=>'<span class="tt-pill tg">#'+ttE(x)+' <button type="button" data-tttrm="'+i+'">✕</button></span>').join('')+'<input id="ttf_tag" placeholder="Skriv og trykk Enter …" value="'+ttE(d.pend||'')+'"></div>'+
+      (sug.length?'<div class="tt-sug">'+sug.map(x=>'<span class="tt-pill tg" data-ttsug="'+ttE(x)+'">＋ #'+ttE(x)+'</span>').join('')+'</div>':''),
+    kvitt:'<div class="tt-imgs">'+(d.kvitt||[]).map((b,i)=>'<div class="tt-img kv"><img src="'+b+'" data-ttkzoom="'+i+'" alt=""><small>Kvittering '+(i+1)+'</small><button type="button" data-ttkrm="'+i+'">✕</button></div>').join('')+'</div>'+ttImgZoneHtml(true)+'<div class="tt-imsg" id="ttkmsg">'+ttE(d.kmsg||'')+'</div>',
+    bilder:'<div class="tt-imgs">'+d.bilder.map((b,i)=>'<div class="tt-img'+(i===0?' first':'')+'"><img src="'+b+'" data-ttzoom="'+i+'" alt=""><button type="button" data-ttirm="'+i+'">✕</button></div>').join('')+
+      '</div>'+ttImgZoneHtml()+'<div class="tt-imsg" id="ttimsg">'+ttE(d.imsg||'')+'</div><div class="tt-ovl"><span>Slipp for å legge til bildene</span><small>Du kan slippe hvor som helst i vinduet</small></div>',
+    notat:'<textarea class="tt-inp" data-ttf="notat" placeholder="Fritekst …">'+ttE(d.notat)+'</textarea>'};
+  const SEL=[['loc','Lokasjon – hvor er den?','Lokasjon'],['kol','Kolleksjon – hva hører den til?','Kolleksjon'],['stand','Stand – hvordan er den?','Stand']];
+  const nb=d.bilder.length,nk=(d.kvitt||[]).length;
+  let body='';
+  if(L==='kort'){
+    const gf=(gr,lab,ctl,id)=>'<div class="tt-gf"'+(id?' id="'+id+'"':'')+ttSt(gr)+'><label class="tt-lb">'+lab+'</label>'+ctl+'</div>';
+    body=gf('hva','Beskriv',C.t)+SEL.map(s=>gf('plass',s[1],ttSelCtl(s[0])+ttSelAdd(s[0]))).join('')+
+      '<div class="tt-gf"'+ttSt('tall')+'><div class="tt-two"><div><label class="tt-lb">Antall</label>'+C.antall+'</div><div><label class="tt-lb">Serienummer</label>'+C.serie+'</div><div><label class="tt-lb">Verdi (kr)</label>'+C.verdi+'</div><div><label class="tt-lb">Solgt for (kr)</label>'+C.solgt+'</div></div></div>'+
+      '<div class="tt-gf"'+ttSt('kjop')+'><label class="tt-lb">Leverandør</label>'+C.lev+'<label class="tt-lb" style="margin-top:8px">Weblink</label>'+C.url+C.lone+'</div>'+
+      gf('kjop','Anskaffet dato',C.ansk)+gf('kjop','Garanti utløper',C.gar)+gf('tags','Tags',C.tags)+gf('bilder','Bilder ('+nb+') – flere på samme ting',C.bilder,'ttbg')+gf('kvitt','Kvitteringer ('+nk+') – flere på samme ting',C.kvitt,'ttkg')+gf('notat','Notat',C.notat);
+  }else if(L==='samlet'){
+    const sg=(gr,tit,inner,id)=>'<div class="tt-sg"'+(id?' id="'+id+'"':'')+ttSt(gr)+'><div class="tt-sgh">'+tit+'</div><div class="tt-sgb">'+inner+'</div></div>';
+    const sf=(lab,ctl)=>'<div class="tt-sf">'+(lab?'<label class="tt-lb">'+lab+'</label>':'')+ctl+'</div>';
+    body=sg('hva','Beskrivelse',sf('Beskriv',C.t))+
+      sg('plass','Plassering',SEL.map(s=>sf(s[1],ttSelCtl(s[0])+ttSelAdd(s[0]))).join(''))+
+      sg('tall','Tall','<div class="tt-two">'+sf('Antall',C.antall)+sf('Serienummer',C.serie)+sf('Verdi (kr)',C.verdi)+sf('Solgt for (kr)',C.solgt)+'</div>')+
+      sg('kjop','Kjøp',sf('Leverandør',C.lev)+sf('Weblink',C.url)+C.lone+'<div class="tt-two">'+sf('Anskaffet',C.ansk)+sf('Garanti utløper',C.gar)+'</div>')+
+      sg('tags','Tags',C.tags)+sg('bilder','Bilder ('+nb+')',C.bilder,'ttbg')+sg('kvitt','Kvitteringer ('+nk+')',C.kvitt,'ttkg')+sg('notat','Notat',C.notat);
+  }else{
+    const rg=(gr,tit,inner,id)=>'<div class="tt-rgl"'+ttSt(gr)+'>'+tit+'</div><div class="tt-rg"'+(id?' id="'+id+'"':'')+ttSt(gr)+'>'+inner+'</div>';
+    const rr=(lab,ctl)=>'<div class="tt-rr"><label class="tt-lb">'+lab+'</label><div class="ct">'+ctl+'</div></div>';
+    const rf=(lab,ctl)=>'<div class="tt-rf">'+(lab?'<label class="tt-lb">'+lab+'</label>':'')+ctl+'</div>';
+    body=rg('hva','Beskrivelse',rf('Beskriv',C.t))+
+      rg('plass','Plassering',SEL.map(s=>rr(s[2],ttSelCtl(s[0]))+(ttDraft.addk===s[0]?rf('',ttSelAdd(s[0])):'')).join(''))+
+      rg('tall','Tall',rr('Antall',C.antall)+rr('Serienummer',C.serie)+rr('Verdi (kr)',C.verdi)+rr('Solgt for (kr)',C.solgt))+
+      rg('kjop','Kjøp',rf('Leverandør',C.lev)+rf('Weblink',C.url)+rf('',C.lone)+rr('Anskaffet',C.ansk)+rr('Garanti utløper',C.gar))+
+      rg('tags','Tags',rf('',C.tags))+rg('bilder','Bilder ('+nb+')',rf('',C.bilder),'ttbg')+rg('kvitt','Kvitteringer ('+nk+')',rf('',C.kvitt),'ttkg')+rg('notat','Notat',rf('',C.notat));
+  }
+  dlg.innerHTML='<div class="tt-dh">'+(d.id?'Ting & Tang':'Ny ting')+'<button type="button" class="tt-x" data-ttclose>'+ttSvg('x')+'</button></div>'+
+    (d.kopiAv?'<div class="tt-kb"><b>Kopi av «'+ttE(d.kopiAv)+'»</b> – ikke lagret ennå. Alt er kopiert, bortsett fra Serienummer og Solgt for, som er tomme. Rediger det som skal være annerledes og trykk Lagre.</div>':'')+
+    body+
+    '<div class="tt-foot"><div style="display:flex;gap:8px;flex-wrap:wrap">'+(d.id?'<button type="button" class="tt-bt '+(d.delAsk?'dd':'d')+'" data-ttdelitem>'+(d.delAsk?'Sikker? Trykk igjen':'Slett')+'</button>'+(d.delAsk?'':'<button type="button" class="tt-bt k" data-ttdupd>'+ttSvg('copy')+'Lag kopi</button>'):'')+'</div><div style="display:flex;gap:8px"><button type="button" class="tt-bt" data-ttclose>Avbryt</button><button type="button" class="tt-bt p" data-ttsave>Lagre</button></div></div>';
+  ttDlgAfter();
+}
+let ttStream=null;
+const TT_PICIC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>';
+function ttImgZoneHtml(kv){
+  const d=ttDraft;const K=kv?'k':'b';
+  let cam='';
+  if(TT_MAC&&d.cam&&(d.camT||'b')===K){
+    cam='<div class="tt-cam" id="ttcam">'+(d.camErr?'<div class="tt-vfn">'+ttE(d.camErr)+'</div>':'<video id="ttvid" autoplay playsinline muted></video>')+
+      '<div class="tt-camrow">'+(d.camErr?'<button type="button" data-ttcamfile>Bruk filvelger</button>':'<button type="button" class="tt-shut" data-ttsnap title="Ta bilde"></button>')+'<button type="button" data-ttcamdone>Ferdig</button></div>'+
+      (d.tatt?'<div class="tt-cnt2">Tatt '+d.tatt+' bilde'+(d.tatt>1?'r':'')+' – ta flere eller trykk Ferdig</div>':'')+'</div>';
+  }
+  const ic=kv?'k':'';
+  return cam+'<div class="tt-dz" id="tt'+(kv?'k':'')+'dz">'+TT_PICIC+'<div class="tt-t1">'+(kv?'Legg til kvittering – flere om du vil':(TT_MAC?'Slipp bilder her':'Legg til bilder'))+'</div><div class="tt-t2">'+(kv?(TT_MAC?'Ta bilde av kvitteringen eller velg fra Bilder-appen / Finder':'Ta bilde av kvitteringen eller velg fra bildebiblioteket'):(TT_MAC?'Dra dem fra Bilder-appen eller Finder, flere om gangen – slipp hvor som helst i vinduet':'Ta et nytt bilde eller velg fra bildebiblioteket'))+'</div>'+
+    '<div class="tt-dbtns"><button type="button" class="tt-bt p" data-tt'+ic+'cam>'+(kv?'Ta bilde av kvittering':'Ta bilde')+'</button><button type="button" class="tt-bt p" data-tt'+ic+'pick>Velg fra bildebiblioteket</button></div>'+(TT_MAC&&!kv?'<div class="tt-tip">Du kan også lime inn et kopiert bilde med ⌘V.</div>':'')+
+    '<input type="file" id="ttf_'+ic+'img" accept="image/*" multiple style="display:none"><input type="file" id="ttf_'+ic+'cam" accept="image/*" capture="environment" style="display:none"></div>';
+}
+function ttCamStop(){if(ttStream){try{ttStream.getTracks().forEach(x=>x.stop());}catch(e){}ttStream=null;}if(ttDraft){ttDraft.cam=false;}}
+function ttCamStart(tg){
+  ttGrab();ttCamStop();ttDraft.camT=tg==='k'?'k':'b';ttDraft.cam=true;ttDraft.camErr='';ttDraft.tatt=0;ttDlgDraw();
+  if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){ttDraft.camErr='Nettleseren gir ikke tilgang til kamera her. Bruk filvelgeren i stedet.';ttDlgDraw();return;}
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false}).then(s=>{
+    if(!ttDraft||!ttDraft.cam){s.getTracks().forEach(x=>x.stop());return;}
+    ttStream=s;const v=document.getElementById('ttvid');if(v)v.srcObject=s;
+  }).catch(e=>{
+    if(!ttDraft)return;
+    ttDraft.camErr=(e&&e.name==='NotAllowedError')?'Du ga ikke tillatelse til kamera. På Mac kan du endre det under Systeminnstillinger → Personvern → Kamera. Du kan også bruke filvelgeren.':'Fant ikke noe kamera på denne maskinen. Bruk filvelgeren i stedet.';
+    ttDlgDraw();
+  });
+}
+function ttSnap(){
+  const v=document.getElementById('ttvid');
+  if(!v||!v.videoWidth){toast('Kameraet er ikke klart ennå.');return;}
+  ttGrab();
+  const sc=Math.min(1,1000/Math.max(v.videoWidth,v.videoHeight));
+  const c=document.createElement('canvas');c.width=Math.round(v.videoWidth*sc);c.height=Math.round(v.videoHeight*sc);
+  c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+  let u='';try{u=c.toDataURL('image/jpeg',0.8);}catch(e){}
+  if(!u){toast('Kunne ikke ta bildet.');return;}
+  if(ttDraft.camT==='k'){ttDraft.kvitt=(ttDraft.kvitt||[]);ttDraft.kvitt.push(u);ttDraft.kmsg='La til kvittering fra kamera';}else{ttDraft.bilder.push(u);ttDraft.imsg='La til bilde fra kamera';}ttDraft.tatt=(ttDraft.tatt||0)+1;ttDlgDraw();
+}
+function ttIsImg(f){return /^image\//.test(f.type||'')||(!f.type&&/\.(jpe?g|png|gif|webp|heic|heif|bmp|tiff?)$/i.test(f.name||''));}
+function ttAddFiles(files,tg){
+  if(!ttDraft)return;
+  ttGrab();
+  const K=tg==='k'?'kvitt':'bilder',M=tg==='k'?'kmsg':'imsg',N=tg==='k'?'kvittering':'bilde';
+  const all=[].slice.call(files||[]);
+  const fl=all.filter(ttIsImg);
+  const skip=all.length-fl.length;
+  if(!fl.length){ttDraft[M]=all.length?'Ingen bildefiler i det du valgte.':'';ttDlgDraw();return;}
+  ttDraft[M]='Legger til '+fl.length+' '+N+(fl.length>1?(tg==='k'?'er':'r'):'')+' …';ttDlgDraw();
+  Promise.all(fl.map(ttImageFrom)).then(r=>{
+    if(!ttDraft)return;
+    const ok=r.filter(Boolean),bad=fl.length-ok.length+skip;
+    ttGrab();ttDraft[K]=(ttDraft[K]||[]).concat(ok);
+    ttDraft[M]='La til '+ok.length+' '+N+(ok.length!==1?(tg==='k'?'er':'r'):'')+(bad?' ('+bad+' fil'+(bad>1?'er':'')+' kunne ikke brukes'+(fl.some(f=>/heic|heif/i.test((f.type||'')+f.name))&&bad?' – HEIC-bilder støttes ikke av alle nettlesere':'')+')':'');
+    ttDlgDraw();
+  });
+}
+document.addEventListener('paste',e=>{
+  if(!ttDraft||!document.getElementById('ttback'))return;
+  const f=[].slice.call((e.clipboardData&&e.clipboardData.files)||[]).filter(ttIsImg);
+  if(f.length){e.preventDefault();ttAddFiles(f);}
+});
+function ttHasFiles(e){return !!(e.dataTransfer&&[].slice.call(e.dataTransfer.types||[]).indexOf('Files')>=0);}
+function ttWireDrop(b){
+  let c=0;const hl=on=>{const g=document.getElementById('ttbg');if(g)g.classList.toggle('over',on);const z=document.getElementById('ttdz');if(z)z.classList.toggle('over',on);};
+  b.addEventListener('dragenter',e=>{if(!ttHasFiles(e))return;e.preventDefault();c++;hl(true);});
+  b.addEventListener('dragover',e=>{if(ttHasFiles(e)){e.preventDefault();try{e.dataTransfer.dropEffect='copy';}catch(x){}}});
+  b.addEventListener('dragleave',()=>{c--;if(c<=0){c=0;hl(false);}});
+  b.addEventListener('drop',e=>{e.preventDefault();c=0;hl(false);if(ttHasFiles(e))ttAddFiles(e.dataTransfer.files);});
+}
+function ttDlgAfter(){
+  const v=document.getElementById('ttvid');if(v&&ttStream&&v.srcObject!==ttStream)v.srcObject=ttStream;
+}
+function ttGrab(){
+  document.querySelectorAll('#ttdlg [data-ttf]').forEach(e=>{ttDraft[e.dataset.ttf]=e.value;});
+  const tg=document.getElementById('ttf_tag');
+  if(tg)ttDraft.pend=tg.value;
+  return ttDraft.pend||'';
+}
+function ttDlgKey(e){
+  if(!ttDraft)return;
+  if(e.key==='Escape'){ttCloseDlg();return;}
+  if(e.key==='Enter'&&e.target.id==='ttf_tag'){
+    e.preventDefault();const v=e.target.value.trim().replace(/^#/,'');
+    ttGrab();if(v&&!ttDraft.tags.includes(v))ttDraft.tags.push(v);ttDraft.pend='';
+    ttDlgDraw();setTimeout(()=>{const n=document.getElementById('ttf_tag');if(n)n.focus();},10);return;
+  }
+  if(e.key==='Enter'&&e.target.id==='ttkn_in'){e.preventDefault();const b=document.querySelector('[data-ttkok]');if(b)b.click();}
+}
+function ttDlgChange(e){
+  if(!ttDraft)return;
+  if(e.target.id==='ttf_img'||e.target.id==='ttf_cam'||e.target.id==='ttf_kimg'||e.target.id==='ttf_kcam'){
+    const files=[].slice.call(e.target.files||[]);const tg=/^ttf_k/.test(e.target.id)?'k':'b';e.target.value='';
+    ttAddFiles(files,tg);
+    return;
+  }
+  if(e.target.matches&&e.target.matches('#ttdlg [data-ttf]')){ttGrab();if(e.target.dataset.ttf==='garanti')ttDlgDraw();}
+}
+function ttDlgInput(e){
+  const t=e.target;if(!ttDraft||!t||!t.dataset||(t.dataset.ttf!=='lev'&&t.dataset.ttf!=='url'))return;
+  const l=document.getElementById('ttf_lev'),u=document.getElementById('ttf_url');if(!l||!u)return;
+  const lo=document.getElementById('ttlone');if(lo)lo.textContent=ttOne(l.value,u.value)||'Fyll ut feltene for å kopiere en linje';
+  const op=document.getElementById('ttop');if(op){const su=ttSafeUrl(u.value);if(su){op.href=su;op.style.display='';}else{op.removeAttribute('href');op.style.display='none';}}
+}
+function ttDlgClick(e){
+  if(!ttDraft)return;
+  const T=s=>e.target.closest&&e.target.closest(s);let el;
+  if((el=T('[data-ttcp]'))){const f=document.getElementById(el.dataset.ttcp==='lev'?'ttf_lev':'ttf_url');const v=f?f.value.trim():'';if(!v){toast('Feltet er tomt.');return;}ttCopy(el.dataset.ttcp==='url'?ttNormUrl(v):v,el);return;}
+  if((el=T('[data-ttcpone]'))){const l=document.getElementById('ttf_lev'),u=document.getElementById('ttf_url');ttCopy(ttOne(l&&l.value,u&&u.value),el);return;}
+  if(T('[data-ttdupd]')){const id=ttDraft.id;if(!id)return;ttCloseDlg();ttOpen(id,true);toast('Kopi laget – ikke lagret ennå.');return;}
+  if(T('[data-ttclose]')){ttCloseDlg();return;}
+  if(T('[data-ttpick]')){const i=document.getElementById('ttf_img');if(i)i.click();return;}
+  if(T('[data-ttcam]')){if(TT_MAC)ttCamStart();else{const i=document.getElementById('ttf_cam');if(i)i.click();}return;}
+  if(T('[data-ttcamfile]')){const i=document.getElementById(ttDraft.camT==='k'?'ttf_kcam':'ttf_cam');if(i)i.click();return;}
+  if(T('[data-ttkpick]')){const i=document.getElementById('ttf_kimg');if(i)i.click();return;}
+  if(T('[data-ttkcam]')){if(TT_MAC)ttCamStart('k');else{const i=document.getElementById('ttf_kcam');if(i)i.click();}return;}
+  if(T('[data-ttsnap]')){ttSnap();return;}
+  if(T('[data-ttcamdone]')){ttGrab();ttCamStop();ttDlgDraw();return;}
+  if((el=T('[data-ttknew]'))){ttGrab();ttDraft.addk=el.dataset.ttknew;ttDlgDraw();setTimeout(()=>{const i=document.getElementById('ttkn_in');if(i)i.focus();},10);return;}
+  if((el=T('[data-ttkok]'))){
+    const k=el.dataset.ttkok;const i=document.getElementById('ttkn_in');const v=i?i.value.trim():'';ttGrab();
+    if(v){const t=ttD();if(!t.cats[k].includes(v))t.cats[k].push(v);ttDraft[k]=v;}
+    ttDraft.addk='';ttDlgDraw();return;
+  }
+  if((el=T('[data-tttrm]'))){ttGrab();ttDraft.tags.splice(+el.dataset.tttrm,1);ttDlgDraw();return;}
+  if((el=T('[data-ttsug]'))){ttGrab();ttDraft.tags.push(el.dataset.ttsug);ttDlgDraw();return;}
+  if((el=T('[data-ttirm]'))){ttGrab();ttDraft.bilder.splice(+el.dataset.ttirm,1);ttDraft.imsg='';ttDlgDraw();return;}
+  if((el=T('[data-ttkrm]'))){ttGrab();ttDraft.kvitt.splice(+el.dataset.ttkrm,1);ttDraft.kmsg='';ttDlgDraw();return;}
+  if((el=T('[data-ttkzoom]'))){ttViewer(ttDraft.kvitt,+el.dataset.ttkzoom,'Kvittering');return;}
+  if((el=T('[data-ttzoom]'))){ttViewer(ttDraft.bilder,+el.dataset.ttzoom,'Bilde');return;}
+  if(T('[data-ttdelitem]')){
+    if(!ttDraft.delAsk){ttGrab();ttDraft.delAsk=true;ttDlgDraw();return;}
+    const t=ttD();const id=ttDraft.id;
+    t.items=t.items.filter(x=>x.id!==id);t.deleted.push({id:id,deletedAt:Date.now()});
+    save();ttCloseDlg();ttRepaint();toast('Slettet');return;
+  }
+  if(T('[data-ttsave]')){ttSaveDraft();return;}
+}
+function ttSaveDraft(){
+  const pend=String(ttGrab()).trim().replace(/^#/,'');
+  const d=ttDraft;
+  if(pend&&!d.tags.includes(pend))d.tags.push(pend);
+  if(!String(d.t||'').trim()){toast('Skriv en beskrivelse.');const f=document.getElementById('ttf_t');if(f)f.focus();return;}
+  const t=ttD();const now=Date.now();
+  const o={id:d.id||ttUid(),t:String(d.t).trim(),loc:d.loc||'',kol:d.kol||'',stand:d.stand||'',antall:Math.max(1,Number(d.antall)||1),serie:String(d.serie||'').trim(),
+    verdi:d.verdi===''||d.verdi==null?'':Number(d.verdi),solgt:d.solgt===''||d.solgt==null?'':Number(d.solgt),garanti:d.garanti||'',anskaffet:d.anskaffet||'',lev:String(d.lev||'').trim(),url:String(d.url||'').trim(),notat:d.notat||'',
+    tags:d.tags.slice(),bilder:d.bilder.slice(),kvitt:(d.kvitt||[]).slice(),updated:now};
+  d.tags.forEach(g=>{if(!t.tags.includes(g))t.tags.push(g);});
+  if(d.id){const i=t.items.findIndex(x=>x.id===d.id);const old=t.items[i];o.created=old?old.created||now:now;if(i>=0)t.items[i]=o;else t.items.push(o);}
+  else{o.created=now;t.items.push(o);}
+  save();ttCloseDlg();ttRepaint();toast('Lagret');
+}
+function ttConfirm(title,text,yes){
+  const old=document.getElementById('ttcf');if(old)old.remove();
+  const b=document.createElement('div');b.className='tt-back';b.id='ttcf';b.style.zIndex=9100;
+  b.innerHTML='<div class="tt-dlg" style="max-width:380px;margin-top:80px"><div class="tt-dh">'+ttE(title)+'</div><div style="font-size:13.5px;margin-bottom:12px">'+ttE(text)+'</div><div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" class="tt-bt" id="ttcfno">Avbryt</button><button type="button" class="tt-bt dd" id="ttcfyes">Ja, fortsett</button></div></div>';
+  document.body.appendChild(b);
+  b.querySelector('#ttcfno').onclick=()=>b.remove();
+  b.querySelector('#ttcfyes').onclick=()=>{b.remove();yes();};
+  b.addEventListener('mousedown',e=>{if(e.target===b)b.remove();});
+}
+
+/* ---------- synk ---------- */
+function ttStamp(d){const p=n=>String(n).padStart(2,'0');d=d||new Date();return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'_'+p(d.getHours())+p(d.getMinutes());}
+function ttFilename(withImages,device){return 'TettPaa-TingTang-fra-'+(TT_MAC?'mac-til-iphone':'iphone-til-mac')+'-versjon'+BUILD_NO+'-'+ttStamp()+(withImages?'-med-bilder':'-uten-bilder')+(device?('_'+device):'')+'.json';}
+function ttPayload(withImages){
+  const t=ttD(),now=Date.now();
+  const items=t.items.map(x=>{const o=Object.assign({},x);if(withImages){o.bilder=(x.bilder||[]).slice();o.kvitt=(x.kvitt||[]).slice();}else{delete o.bilder;delete o.kvitt;}o.tags=(x.tags||[]).slice();return o;});
+  return {app:TT_SYNC_APP,version:TT_SYNC_VER,source:TT_MAC?'Mac':'iPhone',exportedAt:now,withImages:!!withImages,items:items,
+    deleted:t.deleted.filter(d=>(now-(d.deletedAt||0))<TT_TOMB_MS),cats:{loc:t.cats.loc.slice(),kol:t.cats.kol.slice(),stand:t.cats.stand.slice()},tags:t.tags.slice(),skjema:db.meta.ttSkjemaAt?{lay:ttLay(),dens:ttDens(),tema:ttTema(),egen:ttEgen(),at:db.meta.ttSkjemaAt}:null};
+}
+const TT_DEVICES=['MacBaarbar','MacMini','iPad','iPhone'];
+function ttDevicePick(withImages){
+  const old=document.getElementById('ttdp');if(old)old.remove();
+  const b=document.createElement('div');b.className='tt-back';b.id='ttdp';b.style.zIndex=9100;
+  b.innerHTML='<div class="tt-dlg" style="max-width:340px;margin-top:80px"><div class="tt-dh" style="font-size:18px;color:var(--ink,#16201d)">Velg enhet</div>'+TT_DEVICES.map(d=>'<button type="button" class="tt-dp" data-ttdev="'+ttE(d)+'">'+ttE(d)+'</button>').join('')+'<div class="tt-dpf"><button type="button" id="ttdpno">Avbryt</button></div></div>';
+  document.body.appendChild(b);
+  b.addEventListener('mousedown',e=>{if(e.target===b)b.remove();});
+  b.addEventListener('click',e=>{
+    if(e.target.closest('#ttdpno')){b.remove();return;}
+    const x=e.target.closest('[data-ttdev]');if(x){b.remove();ttExport(withImages,x.dataset.ttdev);}
+  });
+}
+function ttExport(withImages,device){
+  try{
+    const data=JSON.stringify(ttPayload(withImages),null,1);
+    const blob=new Blob([data],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download=ttFilename(withImages,device);
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),3000);
+    db.meta.ttLastSync=Date.now();save();
+    toast('Synkfil eksportert'+(withImages?' (med bilder)':' (uten bilder)')+(device?' – '+device:''));
+    ttRepaint();
+  }catch(e){toast('Kunne ikke eksportere.');}
+}
+function ttParse(raw){
+  let d;
+  try{d=JSON.parse(raw);}catch(e){toast('Filen er ikke gyldig JSON.');return null;}
+  if(!d||d.app!==TT_SYNC_APP||!Array.isArray(d.items)){toast('Dette er ikke en Ting & Tang-synkfil.');return null;}
+  if((d.version||1)>TT_SYNC_VER){toast('Filen er laget av en nyere versjon.');return null;}
+  return d;
+}
+function ttMergeCats(d){
+  const t=ttD();
+  if(d.cats&&typeof d.cats==='object')['loc','kol','stand'].forEach(k=>{(Array.isArray(d.cats[k])?d.cats[k]:[]).forEach(n=>{if(n&&typeof n==='string'&&!t.cats[k].includes(n))t.cats[k].push(n);});});
+  (Array.isArray(d.tags)?d.tags:[]).forEach(g=>{if(g&&typeof g==='string'&&!t.tags.includes(g))t.tags.push(g);});
+  // kategorier og tags som brukes av ting skal alltid finnes i listene
+  t.items.forEach(x=>{['loc','kol','stand'].forEach(k=>{if(x[k]&&!t.cats[k].includes(x[k]))t.cats[k].push(x[k]);});(x.tags||[]).forEach(g=>{if(!t.tags.includes(g))t.tags.push(g);});});
+}
+function ttApply(raw,name){
+  const d=ttParse(raw);if(!d)return;
+  const t=ttD(),now=Date.now();
+  const delMap={};
+  [].concat(t.deleted||[],d.deleted||[]).forEach(x=>{if(x&&x.id){const at=x.deletedAt||0;if(!delMap[x.id]||at>delMap[x.id])delMap[x.id]=at;}});
+  const map={};t.items.forEach(x=>{if(x&&x.id)map[x.id]=x;});
+  let added=0,updated=0,removed=0,unchanged=0;
+  d.items.forEach(x=>{
+    if(!x||!x.id)return;
+    const cur=map[x.id];
+    if(!cur){const o=Object.assign({bilder:[],kvitt:[],tags:[]},x);if(!Array.isArray(o.bilder))o.bilder=[];if(!Array.isArray(o.kvitt))o.kvitt=[];map[x.id]=o;added++;return;}
+    if((x.updated||0)>(cur.updated||0)){const o=Object.assign({},x);if(!('bilder' in x))o.bilder=cur.bilder||[];if(!('kvitt' in x))o.kvitt=cur.kvitt||[];if(!Array.isArray(o.kvitt))o.kvitt=[];if(!Array.isArray(o.tags))o.tags=[];map[x.id]=o;updated++;}else unchanged++;
+  });
+  Object.keys(delMap).forEach(id=>{const x=map[id];if(x&&(x.updated||0)<=delMap[id]){delete map[id];removed++;}});
+  t.items=Object.keys(map).map(k=>map[k]);
+  t.deleted=Object.keys(delMap).filter(id=>(now-delMap[id])<TT_TOMB_MS&&!map[id]).map(id=>({id:id,deletedAt:delMap[id]}));
+  ttMergeCats(d);
+  ttSkjemaIn(d,false);
+  db.meta.ttLastSync=now;
+  if(name)db.meta.ttLastImport={name:name,at:now};
+  save();
+  const src=d.source||'ukjent kilde',when=ttWhen(d.exportedAt);
+  ttSyncFrom='Fra <b>'+ttE(src)+'</b>'+(when?', eksportert '+ttE(when):'')+(d.withImages===false?' · uten bilder':'');
+  ttSyncResult=added+' nye · '+updated+' oppdatert · '+removed+' slettet · '+unchanged+' uendret';
+  toast('Flettet fra '+src+': '+ttSyncResult);
+  ttRepaint();
+}
+function ttReplace(raw,name){
+  const d=ttParse(raw);if(!d)return;
+  const t=ttD(),now=Date.now();
+  const loc={};t.items.forEach(x=>{loc[x.id]=x;});
+  t.items=d.items.filter(x=>x&&x.id).map(x=>{const o=Object.assign({tags:[]},x);if(!Array.isArray(o.bilder))o.bilder=(!('bilder' in x)&&loc[x.id]&&loc[x.id].bilder)?loc[x.id].bilder:[];if(!Array.isArray(o.kvitt))o.kvitt=(!('kvitt' in x)&&loc[x.id]&&loc[x.id].kvitt)?loc[x.id].kvitt:[];return o;});
+  t.deleted=(Array.isArray(d.deleted)?d.deleted:[]).filter(x=>x&&x.id).map(x=>({id:x.id,deletedAt:x.deletedAt||0}));
+  t.cats={loc:[],kol:[],stand:[]};t.tags=[];
+  ['loc','kol','stand'].forEach(k=>{t.cats[k]=(d.cats&&Array.isArray(d.cats[k])?d.cats[k]:TT_DEF[k]).slice();});
+  t.tags=(Array.isArray(d.tags)?d.tags:[]).slice();
+  ttMergeCats({});
+  ttSkjemaIn(d,true);
+  db.meta.ttLastSync=now;
+  if(name)db.meta.ttLastImport={name:name,at:now};
+  save();
+  ttSyncFrom='Fra <b>'+ttE(d.source||'ukjent kilde')+'</b>';
+  ttSyncResult='Erstattet – '+t.items.length+' ting hentet fra fila';
+  toast('Alt erstattet med fila');
+  ttRepaint();
+}
+function ttWireSync(host){
+  const fi=host.querySelector('#ttfile'),fr=host.querySelector('#ttfile2'),dz=host.querySelector('#ttdrop');
+  const read=(f,fn)=>{if(!f)return;const r=new FileReader();r.onload=()=>fn(String(r.result||''),f.name);r.readAsText(f);};
+  if(fi)fi.onchange=()=>{const f=fi.files&&fi.files[0];fi.value='';read(f,ttApply);};
+  if(fr)fr.onchange=()=>{const f=fr.files&&fr.files[0];fr.value='';if(f)ttConfirm('Erstatte alt med denne fila?','Alt som ligger i appen nå slettes og byttes ut med innholdet i fila. Ta gjerne en eksport først.',()=>read(f,ttReplace));};
+  if(dz){
+    dz.onclick=()=>{if(fi)fi.click();};
+    dz.ondragover=e=>{e.preventDefault();dz.classList.add('drag');};
+    dz.ondragleave=()=>dz.classList.remove('drag');
+    dz.ondrop=e=>{e.preventDefault();dz.classList.remove('drag');read(e.dataTransfer.files&&e.dataTransfer.files[0],ttApply);};
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(ttDraft&&document.getElementById('ttback')&&!document.getElementById('ttcf')&&!document.getElementById('ttdp')&&!document.querySelector('.tt-lb2')){ttCloseDlg();return;}const dpk=document.getElementById('ttdp');if(dpk){dpk.remove();return;}const c=document.getElementById('ttcf');if(c){c.remove();return;}const l=document.querySelector('.tt-lb2');if(l){l.remove();return;}}},true);
+
+
+/* ---------- skall ---------- */
+function ttOnPaint(){
+  const n=ttD().items.length;
+  document.getElementById('hsub').textContent=n+' registrert · '+ttKr(ttD().items.reduce((a,x)=>a+ttTotal(x),0));
+  document.getElementById('nav').innerHTML=TT_PAGES.map(a=>{const k=ttPageKey(a[0]);return '<button type="button" data-navp="'+k+'" class="'+(ttPage===k?'on':'')+'">'+ttSvg(a[2])+a[1]+'</button>';}).join('');
+  const host=ttHost();
+  if(host&&!host.querySelector('.ph-ver')){const d=document.createElement('div');d.className='ph-ver';d.textContent='TettPå Ting & Tang · versjon '+BUILD_NO+' · '+BUILD_DATE;host.appendChild(d);}
+  renderWarn();
+}
+document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('[data-navp]');if(b){ttSetPage(b.dataset.navp);document.getElementById('ttv').scrollTop=0;}});
+(async function(){
+  await load();
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+  ttD();
+  ttPaint();
+})();
+</script>
+</body>
+</html>
